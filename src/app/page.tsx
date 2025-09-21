@@ -142,7 +142,7 @@ export default function Home() {
           mendapatkan penanganan terbaik.
         </p>
         <a
-          href="https://wa.me/6281234567890"
+          href="https://wa.me/6281286493332?text=Halo%20saya%20ingin%20konsultasi%20lebih%20lanjut"
           target="_blank"
           rel="noopener noreferrer"
           className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
