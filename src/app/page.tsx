@@ -2,101 +2,117 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen flex flex-col">
+      {/* Navbar */}
+      <nav className="flex justify-between items-center px-8 py-4 shadow-md bg-white">
+        <h1 className="text-2xl font-bold text-blue-600">MyWebsite</h1>
+        <div className="space-x-6">
+          <a href="#home" className="hover:text-blue-600">Home</a>
+          <a href="#about" className="hover:text-blue-600">About</a>
+          <a href="#services" className="hover:text-blue-600">Services</a>
+          <a href="#contact" className="hover:text-blue-600">Contact</a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </nav>
+
+{/* Hero Section */}
+<section
+  id="home"
+  className="relative flex-1 min-h-screen flex flex-col md:flex-row items-center justify-center px-6 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-700 text-white overflow-hidden"
+>
+  {/* Background Overlay */}
+  <div className="absolute inset-0 bg-black/30"></div>
+
+  {/* Decorative Circle */}
+  <div className="absolute -top-20 -left-20 w-72 h-72 bg-white/10 rounded-full blur-3xl"></div>
+  <div className="absolute bottom-0 right-0 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+  {/* Content */}
+  <div className="relative flex-1 text-center md:text-left z-10 pl-6 md:pl-12 lg:pl-20">
+    <h2 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight animate-fadeInUp">
+      Selamat Datang di <span className="text-yellow-300">Konsultasi Stroke</span>
+    </h2>
+    <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto md:mx-0 text-gray-100 animate-fadeInUp delay-200">
+      Dapatkan layanan konsultasi terpercaya untuk pencegahan, perawatan, dan pemulihan stroke. 
+      Tim dokter spesialis siap membantu Anda kapan saja dengan pendekatan yang profesional dan penuh empati.
+    </p>
+    <a
+      href="#services"
+      className="inline-block px-8 py-4 bg-yellow-400 text-blue-900 font-semibold rounded-xl shadow-lg hover:scale-105 hover:bg-yellow-300 transition transform duration-300 animate-fadeInUp delay-300"
+    >
+      💬 Konsultasi Sekarang
+    </a>
+  </div>
+
+  {/* Image */}
+  <div className="relative flex-1 mt-10 md:mt-0 flex justify-center z-10">
+    <img
+      src="/assets/image/doctor.jpg"
+      alt="Dokter Konsultasi Stroke"
+      className="w-full max-w-md rounded-2xl shadow-2xl transform hover:scale-105 transition duration-500 animate-fadeInRight"
+    />
+  </div>
+</section>
+
+
+
+{/* About Section */}
+<section id="about" className="py-20 px-6 text-center">
+  <h3 className="text-3xl font-bold mb-6">Tentang Kami</h3>
+  <p className="max-w-2xl mx-auto text-gray-600">
+    Kami adalah tim medis dan konsultan kesehatan yang berfokus pada
+    pencegahan, penanganan, dan pemulihan pasien stroke. 
+    Dengan pengalaman dari tenaga ahli, kami siap membantu pasien 
+    dan keluarga mendapatkan informasi serta pendampingan yang tepat.
+  </p>
+</section>
+
+{/* Services Section */}
+<section id="services" className="py-20 px-6 bg-gray-100">
+  <h3 className="text-3xl font-bold text-center mb-12">Layanan Kami</h3>
+  <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition">
+      <h4 className="text-xl font-semibold mb-2">Konsultasi Stroke</h4>
+      <p className="text-gray-600">
+        Diskusi langsung dengan dokter spesialis saraf mengenai gejala, pencegahan, 
+        hingga pengobatan stroke.
+      </p>
+    </div>
+    <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition">
+      <h4 className="text-xl font-semibold mb-2">Rehabilitasi & Terapi</h4>
+      <p className="text-gray-600">
+        Program pemulihan pasca-stroke dengan fisioterapi, terapi wicara, 
+        dan dukungan psikologis.
+      </p>
+    </div>
+    <div className="p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition">
+      <h4 className="text-xl font-semibold mb-2">Edukasi & Pencegahan</h4>
+      <p className="text-gray-600">
+        Informasi seputar gaya hidup sehat, diet, dan latihan untuk mengurangi risiko stroke berulang.
+      </p>
+    </div>
+  </div>
+</section>
+
+{/* Contact Section */}
+<section id="contact" className="py-20 px-6 text-center">
+  <h3 className="text-3xl font-bold mb-6">Hubungi Kami</h3>
+  <p className="mb-6 text-gray-600">
+    Konsultasi online maupun offline tersedia. Jangan tunda untuk mendapatkan penanganan terbaik.
+  </p>
+  <a
+    href="https://wa.me/6281234567890"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition"
+  >
+    Konsultasi via WhatsApp
+  </a>
+</section>
+
+
+      {/* Footer */}
+      <footer className="bg-gray-800 text-white text-center py-6">
+        <p>&copy; {new Date().getFullYear()} MyWebsite. All rights reserved.</p>
       </footer>
     </div>
   );
