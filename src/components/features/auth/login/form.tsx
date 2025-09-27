@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { set, z } from "zod";
 import { loginSchema } from "../../../../../lib/formSchema";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
@@ -23,7 +23,7 @@ interface LoginFormProps {
 
 export default function LoginForm({ data }: LoginFormProps) {
   const router = useRouter();
-
+  const [error, setError] = useState('');
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,10 +32,25 @@ export default function LoginForm({ data }: LoginFormProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+ async function onSubmit(values: z.infer<typeof loginSchema>) {
+    const { email, password } = values;
+    try {
+      await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      }).then((res) => {
+        if (res.ok) {
+          router.push("/dashboard");
+        } else {
+         setError("Invalid Credentials!")
+        }
+      });
+    } catch (error) {
+     setError("Something went wrong!");
+    }
   }
 
   const [showPassword, setShowPassword] = useState(false);
@@ -101,7 +116,7 @@ export default function LoginForm({ data }: LoginFormProps) {
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link
-              href="/auth/register"
+              href="/register"
               className="underline underline-offset-4"
             >
               Sign up

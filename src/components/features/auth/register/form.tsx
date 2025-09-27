@@ -40,10 +40,25 @@ export default function RegisterForm({ data }: RegisterFormProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof registerSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+ async function onSubmit(values: z.infer<typeof registerSchema>) {
+    const { name, email, password } = values;
+    try {
+      await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      }).then((res) => {
+        if (res.ok) {
+          router.push("/login");
+        } else {
+          setError("User already exists!");
+        }
+      });
+    } catch (error) {
+      setError("Something went wrong!");
+    }
   }
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -116,7 +131,7 @@ export default function RegisterForm({ data }: RegisterFormProps) {
           </div>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
-            <Link href="/auth/login" className="underline underline-offset-4">
+            <Link href="/login" className="underline underline-offset-4">
               Sign In
             </Link>
           </div>

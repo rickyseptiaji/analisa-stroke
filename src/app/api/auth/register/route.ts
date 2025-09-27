@@ -5,6 +5,7 @@ import { hashPassword } from "../../../../../lib/hash";
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json();
+    console.log(name, email, password);
     if (!name || !email || !password) {
       return NextResponse.json({ error: "Field Required!" }, { status: 400 });
     }
