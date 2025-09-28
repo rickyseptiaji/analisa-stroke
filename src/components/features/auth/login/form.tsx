@@ -23,7 +23,8 @@ interface LoginFormProps {
 
 export default function LoginForm({ data }: LoginFormProps) {
   const router = useRouter();
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -32,28 +33,29 @@ export default function LoginForm({ data }: LoginFormProps) {
     },
   });
 
- async function onSubmit(values: z.infer<typeof loginSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
     const { email, password } = values;
     try {
-      await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-      }).then((res) => {
-        if (res.ok) {
-          router.push("/dashboard");
-        } else {
-         setError("Invalid Credentials!")
-        }
       });
+
+      const data = await res.json();
+      if (res.ok) {
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        setError(data.error);
+      }
     } catch (error) {
-     setError("Something went wrong!");
+      setError("Something went wrong. Please try again.");
     }
   }
 
-  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <Form {...form}>
@@ -115,10 +117,7 @@ export default function LoginForm({ data }: LoginFormProps) {
           </div>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="underline underline-offset-4"
-            >
+            <Link href="/register" className="underline underline-offset-4">
               Sign up
             </Link>
           </div>

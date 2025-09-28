@@ -24,12 +24,8 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ data }: RegisterFormProps) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState('');
-  
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -40,27 +36,27 @@ export default function RegisterForm({ data }: RegisterFormProps) {
     },
   });
 
- async function onSubmit(values: z.infer<typeof registerSchema>) {
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
     const { name, email, password } = values;
     try {
-      await fetch("/api/auth/register", {
+     const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email, password }),
-      }).then((res) => {
-        if (res.ok) {
-          router.push("/login");
-        } else {
-          setError("User already exists!");
-        }
-      });
+      })
+      const data = await res.json();
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        setError(data.error);
+      }
     } catch (error) {
       setError("Something went wrong!");
     }
   }
-  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       <Form {...form}>
@@ -112,7 +108,11 @@ export default function RegisterForm({ data }: RegisterFormProps) {
                         onClick={() => setShowPassword((prev) => !prev)}
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
                       >
-                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                        {showPassword ? (
+                          <EyeOff size={20} />
+                        ) : (
+                          <Eye size={20} />
+                        )}
                       </button>
                     </div>
                   </FormControl>
