@@ -11,8 +11,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -20,4 +20,97 @@ model User {
   email    String  @unique
   name     String?
   password String?
+}
+
+model Pasien {
+  id             Int             @id @default(autoincrement())
+  nama           String
+  umur           Int
+  nik            String          @unique
+  jenisKelamin   String
+  tanggalLahir   DateTime
+  alamat         String
+  noTelepon      String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  riwayatStrokes RiwayatStroke[]
+
+  RekamGejala RekamGejala[]
+
+  HasilAnalisa HasilAnalisa[]
+}
+
+model RiwayatStroke {
+  id              Int      @id @default(autoincrement())
+  pasienId        Int
+  hipertensi      Boolean
+  diabetes        Boolean
+  kolesterol      Boolean
+  merokok         Boolean
+  obese           Boolean
+  riwayatKeluarga Boolean
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  pasien          Pasien   @relation(fields: [pasienId], references: [id])
+
+  @@index([pasienId])
+}
+
+model Gejala {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  deskripsi String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  RekamGejala RekamGejala[]
+}
+
+enum Tingkat {
+  RINGAN
+  SEDANG
+  BERAT
+}
+
+model RekamGejala {
+  id        Int      @id @default(autoincrement())
+  pasienId  Int
+  gejalaId  Int
+  nilai     Int
+  tingkat   Tingkat
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pasien    Pasien   @relation(fields: [pasienId], references: [id])
+  gejala    Gejala   @relation(fields: [gejalaId], references: [id])
+
+  @@index([pasienId])
+  @@index([gejalaId])
+}
+
+enum Resiko {
+  RENDAH
+  SEDANG
+  TINGGI
+}
+
+enum JenisStroke {
+  ISKEMIK
+  HEMORAGIK
+  TRANSIENT
+  BELUM_DIKETAHUI
+}
+
+model HasilAnalisa {
+  id             Int         @id @default(autoincrement())
+  pasienId       Int
+  resiko         Resiko
+  jenisStroke    JenisStroke
+  persentase     Float
+  saran          String
+  tanggalAnalisa DateTime    @default(now())
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  pasien         Pasien      @relation(fields: [pasienId], references: [id])
+
+  @@index([pasienId])
 }

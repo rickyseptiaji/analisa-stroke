@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   IconCamera,
   IconChartBar,
@@ -17,12 +17,12 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
-} from "@tabler/icons-react"
+} from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents"
-import { NavMain } from "@/components/nav-main"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavDocuments } from "@/components/nav-documents";
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +31,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const data = {
   user: {
@@ -44,32 +44,30 @@ const data = {
       title: "Dashboard",
       url: "#",
       icon: IconDashboard,
-      isActive: true,
-      items: [
-        { title: "Overview", url: "#" },
-        { title: "Stats", url: "#" },
-        { title: "Reports", url: "#" },
-      ]
     },
     {
-      title: "Lifecycle",
+      title: "Pasien",
       url: "#",
       icon: IconListDetails,
+      items: [
+        { title: "Data Pasien", url: "#" },
+        { title: "Tambah Pasien", url: "#" },
+      ],
     },
     {
-      title: "Analytics",
+      title: "Gejala",
       url: "#",
       icon: IconChartBar,
+      items: [
+        { title: "Data Gejala", url: "#" },
+        { title: "Tambah Gejala", url: "#" },
+        { title: "Diagnosa Gejala", url: "#" },
+      ],
     },
     {
-      title: "Projects",
+      title: "Riwayat Pasien",
       url: "#",
       icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
     },
   ],
   navClouds: [
@@ -154,7 +152,7 @@ const data = {
   //     icon: IconFileWord,
   //   },
   // ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -173,7 +171,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarHeader> 
+      </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
         {/* <NavDocuments items={data.documents} /> */}
@@ -183,5 +181,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }
