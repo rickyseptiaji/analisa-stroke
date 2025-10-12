@@ -42,7 +42,7 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: IconDashboard,
     },
     {
@@ -50,8 +50,8 @@ const data = {
       url: "#",
       icon: IconListDetails,
       items: [
-        { title: "Data Pasien", url: "pasien/data" },
-        { title: "Tambah Pasien", url: "#" },
+        { title: "Data Pasien", url: "/pasien/data" },
+        { title: "Tambah Pasien", url: "/pasien/create" },
       ],
     },
     {
