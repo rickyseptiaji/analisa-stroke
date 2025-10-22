@@ -52,8 +52,6 @@ model Pengetahuan {
 
   gejala   Gejala   @relation("GejalaToPengetahuan", fields: [kd_gejala], references: [kd_gejala])
   penyakit Penyakit @relation("PenyakitToPengetahuan", fields: [kd_penyakit], references: [kd_penyakit])
-
-  relasi Relasi[] @relation("PengetahuanToRelasi")
 }
 
 model Relasi {
@@ -62,10 +60,9 @@ model Relasi {
   kd_penyakit    String  @db.VarChar(10)
   kd_pengetahuan String? @db.VarChar(10)
 
-  gejala      Gejala       @relation("GejalaToRelasi", fields: [kd_gejala], references: [kd_gejala])
-  penyakit    Penyakit     @relation("PenyakitToRelasi", fields: [kd_penyakit], references: [kd_penyakit])
-  pengetahuan Pengetahuan? @relation("PengetahuanToRelasi", fields: [kd_pengetahuan], references: [kd_pengetahuan])
-  hasil       Hasil[]      @relation("RelasiToHasil")
+  gejala   Gejala   @relation("GejalaToRelasi", fields: [kd_gejala], references: [kd_gejala])
+  penyakit Penyakit @relation("PenyakitToRelasi", fields: [kd_penyakit], references: [kd_penyakit])
+  hasil    Hasil[]  @relation("RelasiToHasil")
 
   @@unique([kd_gejala, kd_penyakit])
 }
