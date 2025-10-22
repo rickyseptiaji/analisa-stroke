@@ -17,100 +17,67 @@ datasource db {
 
 model User {
   id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String?
-}
-
-model Pasien {
-  id             Int             @id @default(autoincrement())
-  nama           String
-  umur           Int
-  nik            String          @unique
-  jenisKelamin   String
-  tanggalLahir   DateTime
-  alamat         String
-  noTelepon      String
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  riwayatStrokes RiwayatStroke[]
-
-  RekamGejala RekamGejala[]
-
-  HasilAnalisa HasilAnalisa[]
-}
-
-model RiwayatStroke {
-  id              Int      @id @default(autoincrement())
-  pasienId        Int
-  hipertensi      Boolean
-  diabetes        Boolean
-  kolesterol      Boolean
-  merokok         Boolean
-  obese           Boolean
-  riwayatKeluarga Boolean
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  pasien          Pasien   @relation(fields: [pasienId], references: [id])
-
-  @@index([pasienId])
+  name     String? @db.VarChar(50)
+  username String  @unique @db.VarChar(50)
+  password String? @db.VarChar(50)
 }
 
 model Gejala {
-  id        Int      @id @default(autoincrement())
-  nama      String
-  deskripsi String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  kd_gejala   String   @id @db.Char(10)
+  nama_gejala String   @db.VarChar(50)
+  poin_Gejala String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  RekamGejala RekamGejala[]
+  pengetahuan Pengetahuan[] @relation("GejalaToPengetahuan")
+  relasi      Relasi[]      @relation("GejalaToRelasi")
+  hasil       Hasil[]       @relation("GejalaToHasil")
 }
 
-enum Tingkat {
-  RINGAN
-  SEDANG
-  BERAT
+model Penyakit {
+  kd_penyakit   String @id @db.VarChar(10)
+  nama_penyakit String @db.VarChar(50)
+  solusi        String
+
+  pengetahuan Pengetahuan[] @relation("PenyakitToPengetahuan")
+  relasi      Relasi[]      @relation("PenyakitToRelasi")
+  hasil       Hasil[]       @relation("PenyakitToHasil")
 }
 
-model RekamGejala {
-  id        Int      @id @default(autoincrement())
-  pasienId  Int
-  gejalaId  Int
-  nilai     Int
-  tingkat   Tingkat
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pasien    Pasien   @relation(fields: [pasienId], references: [id])
-  gejala    Gejala   @relation(fields: [gejalaId], references: [id])
+model Pengetahuan {
+  kd_pengetahuan String @id @db.VarChar(10)
+  kd_gejala      String @db.VarChar(10)
+  kd_penyakit    String @db.VarChar(10)
+  pertanyaan     String
 
-  @@index([pasienId])
-  @@index([gejalaId])
+  gejala   Gejala   @relation("GejalaToPengetahuan", fields: [kd_gejala], references: [kd_gejala])
+  penyakit Penyakit @relation("PenyakitToPengetahuan", fields: [kd_penyakit], references: [kd_penyakit])
+
+  relasi Relasi[] @relation("PengetahuanToRelasi")
 }
 
-enum Resiko {
-  RENDAH
-  SEDANG
-  TINGGI
+model Relasi {
+  id             Int     @id @default(autoincrement())
+  kd_gejala      String  @db.VarChar(10)
+  kd_penyakit    String  @db.VarChar(10)
+  kd_pengetahuan String? @db.VarChar(10)
+
+  gejala      Gejala       @relation("GejalaToRelasi", fields: [kd_gejala], references: [kd_gejala])
+  penyakit    Penyakit     @relation("PenyakitToRelasi", fields: [kd_penyakit], references: [kd_penyakit])
+  pengetahuan Pengetahuan? @relation("PengetahuanToRelasi", fields: [kd_pengetahuan], references: [kd_pengetahuan])
+  hasil       Hasil[]      @relation("RelasiToHasil")
+
+  @@unique([kd_gejala, kd_penyakit])
 }
 
-enum JenisStroke {
-  ISKEMIK
-  HEMORAGIK
-  TRANSIENT
-  BELUM_DIKETAHUI
-}
+model Hasil {
+  id          Int    @id @default(autoincrement())
+  kd_gejala   String @db.VarChar(10)
+  kd_penyakit String @db.VarChar(10)
+  poin_gejala String
+  poin_user   String
 
-model HasilAnalisa {
-  id             Int         @id @default(autoincrement())
-  pasienId       Int
-  resiko         Resiko
-  jenisStroke    JenisStroke
-  persentase     Float
-  saran          String
-  tanggalAnalisa DateTime    @default(now())
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  pasien         Pasien      @relation(fields: [pasienId], references: [id])
-
-  @@index([pasienId])
+  gejala   Gejala   @relation("GejalaToHasil", fields: [kd_gejala], references: [kd_gejala])
+  penyakit Penyakit @relation("PenyakitToHasil", fields: [kd_penyakit], references: [kd_penyakit])
+  relasi   Relasi?  @relation("RelasiToHasil", fields: [kd_gejala, kd_penyakit], references: [kd_gejala, kd_penyakit])
 }

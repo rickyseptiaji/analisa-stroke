@@ -73,17 +73,17 @@ const data = {
         { title: "Tambah Pengetahuan", url: "#" },
       ],
     },
-    {
-      title: "Konsultasi",
-      url: "#",
-      icon: IconChartBar,
-      items: [{ title: "Diagnosa Gejala", url: "#" }],
-    },
-    {
-      title: "Riwayat Pasien",
-      url: "#",
-      icon: IconFolder,
-    },
+    // {
+    //   title: "Konsultasi",
+    //   url: "#",
+    //   icon: IconChartBar,
+    //   items: [{ title: "Diagnosa Gejala", url: "#" }],
+    // },
+    // {
+    //   title: "Riwayat Pasien",
+    //   url: "#",
+    //   icon: IconFolder,
+    // },
   ],
   navClouds: [
     {
