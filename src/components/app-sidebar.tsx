@@ -61,8 +61,23 @@ const data = {
       items: [
         { title: "Data Gejala", url: "#" },
         { title: "Tambah Gejala", url: "#" },
-        { title: "Diagnosa Gejala", url: "#" },
       ],
+    },
+
+    {
+      title: "Pengetahuan",
+      url: "#",
+      icon: IconChartBar,
+      items: [
+        { title: "Data Pengetahuan", url: "#" },
+        { title: "Tambah Pengetahuan", url: "#" },
+      ],
+    },
+    {
+      title: "Konsultasi",
+      url: "#",
+      icon: IconChartBar,
+      items: [{ title: "Diagnosa Gejala", url: "#" }],
     },
     {
       title: "Riwayat Pasien",

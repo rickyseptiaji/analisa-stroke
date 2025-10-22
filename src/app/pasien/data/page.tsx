@@ -1,13 +1,11 @@
-import { DataTable } from "@/components/data-table";
-import { SectionCards } from "@/components/section-cards";
 import { MainLayout } from "@/layout/mainLayout";
-import data from "./data.json";
+import DataPasien from "@/components/features/pasien/data/data";
 
 export default function Page() {
   return (
     <>
       <MainLayout title="Data Pasien">
-                <DataTable data={data} />
+        <DataPasien />
       </MainLayout>
     </>
   );
