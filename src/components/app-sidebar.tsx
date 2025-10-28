@@ -63,7 +63,15 @@ const data = {
         { title: "Tambah Gejala", url: "#" },
       ],
     },
-
+    {
+      title: "Penyakit",
+      url: "#",
+      icon: IconChartBar,
+      items: [
+        { title: "Data Penyakit", url: "#" },
+        { title: "Tambah Penyakit", url: "/penyakit/create" },
+      ],
+    },
     {
       title: "Pengetahuan",
       url: "#",
