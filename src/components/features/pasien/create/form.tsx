@@ -13,23 +13,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ChevronDownIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 const formSchema = z.object({
   nik: z.string().min(16, {
     message: "NIK must be at least 16 characters.",
   }),
-  nama: z.string().min(2, {
+  nama_lengkap: z.string().min(2, {
     message: "Nama must be at least 2 characters.",
   }),
   umur: z.coerce.number().min(1, { message: "Umur must be at least 1 digit." }),
   alamat: z.string().min(5, {
     message: "Alamat must be at least 5 characters.",
   }),
-  gender: z.enum(["L", "P"], {
+  jenis_kelamin: z.enum(["L", "P"], {
     errorMap: () => ({ message: "Jenis Kelamin is required." }),
   }),
 
@@ -38,141 +51,169 @@ const formSchema = z.object({
   }),
 });
 export default function PasienCreateForm() {
+  const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       nik: "",
-      nama: "",
+      nama_lengkap: "",
       umur: undefined,
       alamat: "",
-      gender: undefined,
+      jenis_kelamin: undefined,
       tanggal_lahir: undefined,
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { nik, nama_lengkap, umur, alamat, jenis_kelamin, tanggal_lahir } =
+      values;
+    try {
+      setIsloading(true);
+      const res = await fetch("/api/pasien", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nik,
+          nama_lengkap,
+          umur,
+          alamat,
+          jenis_kelamin,
+          tanggal_lahir,
+        }),
+      });
+      if (!res.ok) throw new Error("Gagal menambahkan data pasien");
+      form.reset();
+      alert("Data pasien berhasil ditambahkan!");
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsloading(false);
+    }
   }
   return (
     <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="nik"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>NIK</FormLabel>
+                <FormControl>
+                  <Input placeholder="NIK" {...field} type="number" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-
-                <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormField
-                control={form.control}
-                name="nik"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>NIK</FormLabel>
-                    <FormControl>
-                      <Input placeholder="NIK" {...field} type="number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="nama"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nama Lengkap</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nama Lengkap" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="tanggal_lahir"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tanggal Lahir</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-between"
-                        >
-                          {field.value
-                            ? field.value.toLocaleDateString()
-                            : "Pilih Tanggal"}
-                          <ChevronDownIcon className="ml-2 h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          captionLayout="dropdown"
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="umur"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Umur</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Umur" {...field} type="number" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Jenis Kelamin</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Pilih Jenis Kelamin" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectItem value="L">Laki-laki</SelectItem>
-                          <SelectItem value="P">Perempuan</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="alamat"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Alamat</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Masukkan alamat lengkap"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Submit
-              </Button>
-            </form>
-          </Form>
+          <FormField
+            control={form.control}
+            name="nama_lengkap"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nama Lengkap</FormLabel>
+                <FormControl>
+                  <Input placeholder="Nama Lengkap" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tanggal_lahir"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tanggal Lahir</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between"
+                    >
+                      {field.value
+                        ? field.value.toLocaleDateString()
+                        : "Pilih Tanggal"}
+                      <ChevronDownIcon className="ml-2 h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      captionLayout="dropdown"
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="umur"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Umur</FormLabel>
+                <FormControl>
+                  <Input placeholder="Umur" {...field} type="number" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="jenis_kelamin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Jenis Kelamin</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Pilih Jenis Kelamin" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="L">Laki-laki</SelectItem>
+                      <SelectItem value="P">Perempuan</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="alamat"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Alamat</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Masukkan alamat lengkap" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <LoadingSpinner className="w-4 h-4" />
+                <span>Menyimpan...</span>
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </form>
+      </Form>
     </>
   );
 }

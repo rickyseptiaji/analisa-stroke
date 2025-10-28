@@ -6,18 +6,18 @@ import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
-    if (!email || !password) {
+    const { username, password } = await req.json();
+    if (!username || !password) {
       return NextResponse.json(
         {
-          error: "Email and password required",
+          error: "Username and password required",
         },
         { status: 400 }
       );
     }
 
     const user = await prisma.user.findUnique({
-      where: { email },
+      where: { username },
     });
     if (!user) {
       return NextResponse.json(
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = signJwt({ id: user.id, email: user.email });
+    const token = signJwt({ id: user.id, email: user.username });
 
      (await cookies()).set("token", token, {
       httpOnly: true,

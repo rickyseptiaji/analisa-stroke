@@ -30,21 +30,21 @@ export default function RegisterForm({ data }: RegisterFormProps) {
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      nama: "",
+      username: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof registerSchema>) {
-    const { name, email, password } = values;
+    const { nama, username, password } = values;
     try {
      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ nama, username, password }),
       })
       const data = await res.json();
       if (res.ok) {
@@ -64,12 +64,12 @@ export default function RegisterForm({ data }: RegisterFormProps) {
           <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
-              name="name"
+              name="nama"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Nama</FormLabel>
                   <FormControl>
-                    <Input placeholder="Name" {...field} />
+                    <Input placeholder="Nama" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -77,12 +77,12 @@ export default function RegisterForm({ data }: RegisterFormProps) {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} />
+                    <Input placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

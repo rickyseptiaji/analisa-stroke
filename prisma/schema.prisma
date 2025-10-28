@@ -17,13 +17,25 @@ datasource db {
 
 model User {
   id       Int     @id @default(autoincrement())
-  name     String? @db.VarChar(50)
+  nama     String? @db.VarChar(50)
   username String  @unique @db.VarChar(50)
-  password String? @db.VarChar(50)
+  password String? @db.VarChar(255)
+}
+
+model Pasien {
+  id            Int      @id @default(autoincrement())
+  nik           String   @unique @db.VarChar(50)
+  nama_lengkap  String   @db.VarChar(50)
+  tanggal_lahir DateTime
+  umur          Int      @db.Integer()
+  jenis_kelamin String   @db.VarChar(50)
+  alamat        String   @db.VarChar(255)
+
+  hasil Hasil[]
 }
 
 model Gejala {
-  kd_gejala   String   @id @db.Char(10)
+  kd_gejala   String   @id @db.VarChar(10)
   nama_gejala String   @db.VarChar(50)
   poin_Gejala String?
   createdAt   DateTime @default(now())
@@ -55,10 +67,9 @@ model Pengetahuan {
 }
 
 model Relasi {
-  id             Int     @id @default(autoincrement())
-  kd_gejala      String  @db.VarChar(10)
-  kd_penyakit    String  @db.VarChar(10)
-  kd_pengetahuan String? @db.VarChar(10)
+  id          Int    @id @default(autoincrement())
+  kd_gejala   String @db.VarChar(10)
+  kd_penyakit String @db.VarChar(10)
 
   gejala   Gejala   @relation("GejalaToRelasi", fields: [kd_gejala], references: [kd_gejala])
   penyakit Penyakit @relation("PenyakitToRelasi", fields: [kd_penyakit], references: [kd_penyakit])
@@ -73,7 +84,9 @@ model Hasil {
   kd_penyakit String @db.VarChar(10)
   poin_gejala String
   poin_user   String
+  pasienId    Int
 
+  pasien   Pasien   @relation(fields: [pasienId], references: [id])
   gejala   Gejala   @relation("GejalaToHasil", fields: [kd_gejala], references: [kd_gejala])
   penyakit Penyakit @relation("PenyakitToHasil", fields: [kd_penyakit], references: [kd_penyakit])
   relasi   Relasi?  @relation("RelasiToHasil", fields: [kd_gejala, kd_penyakit], references: [kd_gejala, kd_penyakit])

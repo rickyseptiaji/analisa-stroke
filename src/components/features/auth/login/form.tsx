@@ -28,20 +28,20 @@ export default function LoginForm({ data }: LoginFormProps) {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    const { email, password } = values;
+    const { username, password } = values;
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
@@ -63,12 +63,12 @@ export default function LoginForm({ data }: LoginFormProps) {
           <div className="flex flex-col gap-6">
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Email" {...field} />
+                    <Input placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

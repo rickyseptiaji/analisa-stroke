@@ -73,12 +73,12 @@ const data = {
         { title: "Tambah Pengetahuan", url: "#" },
       ],
     },
-    // {
-    //   title: "Konsultasi",
-    //   url: "#",
-    //   icon: IconChartBar,
-    //   items: [{ title: "Diagnosa Gejala", url: "#" }],
-    // },
+    {
+      title: "Konsultasi",
+      url: "#",
+      icon: IconChartBar,
+      items: [{ title: "Diagnosa Gejala", url: "#" }],
+    },
     // {
     //   title: "Riwayat Pasien",
     //   url: "#",

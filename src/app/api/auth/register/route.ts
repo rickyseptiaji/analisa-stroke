@@ -4,13 +4,13 @@ import { hashPassword } from "../../../../../lib/hash";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, password } = await req.json();
-    console.log(name, email, password);
-    if (!name || !email || !password) {
+    const { nama, username, password } = await req.json();
+
+    if (!nama || !username || !password) {
       return NextResponse.json({ error: "Field Required!" }, { status: 400 });
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
+    const existingUser = await prisma.user.findUnique({ where: { username } });
     if (existingUser) {
       return NextResponse.json(
         { error: "User already exists!" },
@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
     const hashedPassword = await hashPassword(password);
     const user = await prisma.user.create({
       data: {
-        name,
-        email,
+        nama,
+        username,
         password: hashedPassword,
       },
     });
@@ -29,11 +29,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       user: {
         id: user.id,
-        email: user.email,
-        name: user.name,
+        username: user.username,
+        nama: user.nama,
       },
     });
   } catch (error) {
+      console.error("Error creating user:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
