@@ -29,13 +29,14 @@ model Pasien {
   tanggal_lahir DateTime
   umur          Int      @db.Integer()
   jenis_kelamin String   @db.VarChar(50)
+  phone         String   @db.VarChar(50)
   alamat        String   @db.VarChar(255)
 
   hasil Hasil[]
 }
 
 model Gejala {
-  kd_gejala   String   @id @db.VarChar(10)
+  kd_gejala   String   @unique @db.VarChar(10)
   nama_gejala String   @db.VarChar(50)
   poin_Gejala String?
   createdAt   DateTime @default(now())
@@ -47,7 +48,7 @@ model Gejala {
 }
 
 model Penyakit {
-  kd_penyakit   String @id @db.VarChar(10)
+  kd_penyakit   String @unique @db.VarChar(10)
   nama_penyakit String @db.VarChar(50)
   solusi        String
 
@@ -57,7 +58,7 @@ model Penyakit {
 }
 
 model Pengetahuan {
-  kd_pengetahuan String @id @db.VarChar(10)
+  kd_pengetahuan String  @unique @db.VarChar(10)
   kd_gejala      String @db.VarChar(10)
   kd_penyakit    String @db.VarChar(10)
   pertanyaan     String
@@ -67,7 +68,7 @@ model Pengetahuan {
 }
 
 model Relasi {
-  id          Int    @id @default(autoincrement())
+  id          Int    @id @unique @default(autoincrement())
   kd_gejala   String @db.VarChar(10)
   kd_penyakit String @db.VarChar(10)
 
@@ -79,7 +80,7 @@ model Relasi {
 }
 
 model Hasil {
-  id          Int    @id @default(autoincrement())
+  id          Int    @id @unique @default(autoincrement())
   kd_gejala   String @db.VarChar(10)
   kd_penyakit String @db.VarChar(10)
   poin_gejala String

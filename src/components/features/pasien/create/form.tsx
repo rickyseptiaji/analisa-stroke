@@ -32,9 +32,10 @@ import {
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 const formSchema = z.object({
-  nik: z.string().min(16, {
-    message: "NIK must be at least 16 characters.",
-  }),
+  nik: z
+    .string()
+    .regex(/^\d+$/, { message: "NIK hanya boleh berisi angka." })
+    .length(16, { message: "NIK harus terdiri dari 16 digit." }),
   nama_lengkap: z.string().min(2, {
     message: "Nama must be at least 2 characters.",
   }),
@@ -42,10 +43,10 @@ const formSchema = z.object({
   alamat: z.string().min(5, {
     message: "Alamat must be at least 5 characters.",
   }),
-  jenis_kelamin: z.enum(["L", "P"], {
-    errorMap: () => ({ message: "Jenis Kelamin is required." }),
+  jenis_kelamin: z.string(),
+  phone: z.string().min(10, {
+    message: "Phone must be at least 10 characters.",
   }),
-
   tanggal_lahir: z.date({
     errorMap: () => ({ message: "Tanggal Lahir is required." }),
   }),
@@ -59,13 +60,21 @@ export default function PasienCreateForm() {
       nama_lengkap: "",
       umur: undefined,
       alamat: "",
-      jenis_kelamin: undefined,
+      jenis_kelamin: "",
+      phone: "",
       tanggal_lahir: undefined,
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { nik, nama_lengkap, umur, alamat, jenis_kelamin, tanggal_lahir } =
-      values;
+    const {
+      nik,
+      nama_lengkap,
+      umur,
+      alamat,
+      jenis_kelamin,
+      phone,
+      tanggal_lahir,
+    } = values;
     try {
       setIsloading(true);
       const res = await fetch("/api/pasien", {
@@ -79,6 +88,7 @@ export default function PasienCreateForm() {
           umur,
           alamat,
           jenis_kelamin,
+          phone,
           tanggal_lahir,
         }),
       });
@@ -102,7 +112,11 @@ export default function PasienCreateForm() {
               <FormItem>
                 <FormLabel>NIK</FormLabel>
                 <FormControl>
-                  <Input placeholder="NIK" {...field} type="number" />
+                  <Input
+                    placeholder="NIK"
+                    maxLength={16}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -185,6 +199,19 @@ export default function PasienCreateForm() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>No HP</FormLabel>
+                <FormControl>
+                  <Input placeholder="No HP" {...field} type="number" />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

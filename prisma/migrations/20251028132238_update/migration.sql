@@ -16,6 +16,7 @@ CREATE TABLE "public"."Pasien" (
     "tanggal_lahir" TIMESTAMP(3) NOT NULL,
     "umur" INTEGER NOT NULL,
     "jenis_kelamin" VARCHAR(50) NOT NULL,
+    "phone" VARCHAR(50) NOT NULL,
     "alamat" VARCHAR(255) NOT NULL,
 
     CONSTRAINT "Pasien_pkey" PRIMARY KEY ("id")
@@ -27,18 +28,14 @@ CREATE TABLE "public"."Gejala" (
     "nama_gejala" VARCHAR(50) NOT NULL,
     "poin_Gejala" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "Gejala_pkey" PRIMARY KEY ("kd_gejala")
+    "updatedAt" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "public"."Penyakit" (
     "kd_penyakit" VARCHAR(10) NOT NULL,
     "nama_penyakit" VARCHAR(50) NOT NULL,
-    "solusi" TEXT NOT NULL,
-
-    CONSTRAINT "Penyakit_pkey" PRIMARY KEY ("kd_penyakit")
+    "solusi" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -46,9 +43,7 @@ CREATE TABLE "public"."Pengetahuan" (
     "kd_pengetahuan" VARCHAR(10) NOT NULL,
     "kd_gejala" VARCHAR(10) NOT NULL,
     "kd_penyakit" VARCHAR(10) NOT NULL,
-    "pertanyaan" TEXT NOT NULL,
-
-    CONSTRAINT "Pengetahuan_pkey" PRIMARY KEY ("kd_pengetahuan")
+    "pertanyaan" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -79,7 +74,22 @@ CREATE UNIQUE INDEX "User_username_key" ON "public"."User"("username");
 CREATE UNIQUE INDEX "Pasien_nik_key" ON "public"."Pasien"("nik");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Gejala_kd_gejala_key" ON "public"."Gejala"("kd_gejala");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Penyakit_kd_penyakit_key" ON "public"."Penyakit"("kd_penyakit");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Pengetahuan_kd_pengetahuan_key" ON "public"."Pengetahuan"("kd_pengetahuan");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Relasi_id_key" ON "public"."Relasi"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Relasi_kd_gejala_kd_penyakit_key" ON "public"."Relasi"("kd_gejala", "kd_penyakit");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Hasil_id_key" ON "public"."Hasil"("id");
 
 -- AddForeignKey
 ALTER TABLE "public"."Pengetahuan" ADD CONSTRAINT "Pengetahuan_kd_gejala_fkey" FOREIGN KEY ("kd_gejala") REFERENCES "public"."Gejala"("kd_gejala") ON DELETE RESTRICT ON UPDATE CASCADE;
