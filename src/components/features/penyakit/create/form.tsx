@@ -10,7 +10,6 @@ import {
   Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -23,9 +22,6 @@ const formSchema = z.object({
   nama_penyakit: z.string().min(5, {
     message: "nama penyakit must be at least 5 characters.",
   }),
-  solusi: z.string().min(5, {
-    message: "solusi must be at least 5 characters.",
-  }),
 });
 export default function PenyakitCreateForm() {
   const [isLoading, setIsloading] = useState(false);
@@ -34,11 +30,10 @@ export default function PenyakitCreateForm() {
     defaultValues: {
       kd_penyakit: "",
       nama_penyakit: "",
-      solusi: "",
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { kd_penyakit, nama_penyakit, solusi } = values;
+    const { kd_penyakit, nama_penyakit } = values;
     try {
       setIsloading(true);
       const res = await fetch("/api/penyakit", {
@@ -49,7 +44,6 @@ export default function PenyakitCreateForm() {
         body: JSON.stringify({
           kd_penyakit,
           nama_penyakit,
-          solusi,
         }),
       });
       if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
@@ -86,19 +80,6 @@ export default function PenyakitCreateForm() {
                 <FormLabel>Nama Penyakit</FormLabel>
                 <FormControl>
                   <Input placeholder="Nama Penyakit" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="solusi"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Solusi</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Masukkan solusi" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -50,7 +50,7 @@ const data = {
       url: "#",
       icon: IconListDetails,
       items: [
-        { title: "Data Pasien", url: "/pasien/data" },
+        { title: "Data Pasien", url: "/pasien" },
         { title: "Tambah Pasien", url: "/pasien/create" },
       ],
     },
@@ -64,12 +64,12 @@ const data = {
       ],
     },
     {
-      title: "Penyakit",
+      title: "Penyakit & Solusi",
       url: "#",
       icon: IconChartBar,
       items: [
-        { title: "Data Penyakit", url: "#" },
-        { title: "Tambah Penyakit", url: "/penyakit/create" },
+        { title: "Penyakit", url: "/penyakit" },
+        { title: "Solusi", url: "/solusi" },
       ],
     },
     {

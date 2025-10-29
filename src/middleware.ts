@@ -5,6 +5,9 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value || null;
   const { pathname } = request.nextUrl;
+    if (pathname === "/") {
+    return NextResponse.redirect(new URL(token ? "/dashboard" : "/login", request.url));
+  }
   if (!token && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
@@ -16,5 +19,12 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: [
+    "/dashboard/:path*",
+    "/login",
+    "/register",
+    "/",
+    "/pasien",
+    "/penyakit",
+  ],
 };

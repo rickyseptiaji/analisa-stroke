@@ -50,15 +50,21 @@ model Gejala {
 model Penyakit {
   kd_penyakit   String @unique @db.VarChar(10)
   nama_penyakit String @db.VarChar(50)
-  solusi        String
-
   pengetahuan Pengetahuan[] @relation("PenyakitToPengetahuan")
   relasi      Relasi[]      @relation("PenyakitToRelasi")
   hasil       Hasil[]       @relation("PenyakitToHasil")
+  solusi      Solusi[]      @relation("PenyakitToSolusi")
+}
+
+model Solusi {
+  id          Int      @id @unique @default(autoincrement())
+  solusi      String   @db.Text
+  kd_penyakit String
+  penyakit    Penyakit @relation("PenyakitToSolusi", fields: [kd_penyakit], references: [kd_penyakit])
 }
 
 model Pengetahuan {
-  kd_pengetahuan String  @unique @db.VarChar(10)
+  kd_pengetahuan String @unique @db.VarChar(10)
   kd_gejala      String @db.VarChar(10)
   kd_penyakit    String @db.VarChar(10)
   pertanyaan     String

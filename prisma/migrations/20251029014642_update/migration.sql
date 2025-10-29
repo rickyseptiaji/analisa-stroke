@@ -34,8 +34,16 @@ CREATE TABLE "public"."Gejala" (
 -- CreateTable
 CREATE TABLE "public"."Penyakit" (
     "kd_penyakit" VARCHAR(10) NOT NULL,
-    "nama_penyakit" VARCHAR(50) NOT NULL,
-    "solusi" TEXT NOT NULL
+    "nama_penyakit" VARCHAR(50) NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "public"."Solusi" (
+    "id" SERIAL NOT NULL,
+    "solusi" TEXT NOT NULL,
+    "kd_penyakit" TEXT NOT NULL,
+
+    CONSTRAINT "Solusi_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -80,6 +88,9 @@ CREATE UNIQUE INDEX "Gejala_kd_gejala_key" ON "public"."Gejala"("kd_gejala");
 CREATE UNIQUE INDEX "Penyakit_kd_penyakit_key" ON "public"."Penyakit"("kd_penyakit");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Solusi_id_key" ON "public"."Solusi"("id");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Pengetahuan_kd_pengetahuan_key" ON "public"."Pengetahuan"("kd_pengetahuan");
 
 -- CreateIndex
@@ -90,6 +101,9 @@ CREATE UNIQUE INDEX "Relasi_kd_gejala_kd_penyakit_key" ON "public"."Relasi"("kd_
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Hasil_id_key" ON "public"."Hasil"("id");
+
+-- AddForeignKey
+ALTER TABLE "public"."Solusi" ADD CONSTRAINT "Solusi_kd_penyakit_fkey" FOREIGN KEY ("kd_penyakit") REFERENCES "public"."Penyakit"("kd_penyakit") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Pengetahuan" ADD CONSTRAINT "Pengetahuan_kd_gejala_fkey" FOREIGN KEY ("kd_gejala") REFERENCES "public"."Gejala"("kd_gejala") ON DELETE RESTRICT ON UPDATE CASCADE;

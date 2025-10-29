@@ -1,23 +1,23 @@
 "use client";
 
 import { MainLayout } from "@/layout/mainLayout";
-import { PasienTable } from "./components/pasienTable";
+import  { PenyakitTable } from "./components/penyakitTable";
 import { useEffect, useState } from "react";
-export default function DataPasien() {
+export default function DataPenyakit() {
   const [tableData, setTableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("/api/pasien");
+      const response = await fetch("/api/penyakit");
       if (!response.ok) {
-        throw new Error("Failed to fetch pasien data");
+        throw new Error("Failed to fetch penyakit data");
       }
       const data = await response.json();
       setTableData(data);
     } catch (error) {
-      console.error("Error fetching pasien data:", error);
+      console.error("Error fetching penyakit data:", error);
     } finally {
       setIsLoading(false);
     }
@@ -28,8 +28,8 @@ export default function DataPasien() {
   },[])
   return (
     <>
-      <MainLayout title="Pasien">
-        <PasienTable data={tableData} isLoading={isLoading} />
+      <MainLayout title="Penyakit">
+        <PenyakitTable data={tableData} isLoading={isLoading} />
       </MainLayout>
     </>
   );

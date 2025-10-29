@@ -1,4 +1,4 @@
-import DataPasien from "@/components/features/pasien/data/data";
+import DataPasien from "@/components/features/pasien/data";
 
 export default function Page() {
   return (

@@ -1,7 +1,7 @@
 import { TableActions } from "@/components/TableActions";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const visitorColumns: ColumnDef<any>[] = [
+export const penyakitColumns: ColumnDef<any>[] = [
   {
     id: "no",
     header: "No",
@@ -16,29 +16,14 @@ export const visitorColumns: ColumnDef<any>[] = [
   //   header: "ID",
   // },
   {
-    accessorKey: "nik",
-    header: "NIK",
+    accessorKey: "kd_penyakit",
+    header: "Kode Penyakit",
   },
   {
-    accessorKey: "nama_lengkap",
-    header: "Nama Lengkap",
+    accessorKey: "nama_penyakit",
+    header: "Nama Penyakit",
   },
-  {
-    accessorKey: "tanggal_lahir",
-    header: "Tanggal Lahir",
-  },
-  {
-    accessorKey: "jenis_kelamin",
-    header: "Jenis Kelamin",
-  },
-  {
-    accessorKey: "phone",
-    header: "No HP",
-  },
-  {
-    accessorKey: "alamat",
-    header: "Alamat",
-  },
+
 
   {
     id: "actions",

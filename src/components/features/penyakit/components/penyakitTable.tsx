@@ -15,7 +15,7 @@ import {
   type RowSelectionState,
   type PaginationState,
 } from "@tanstack/react-table";
-import { visitorColumns } from "./columns";
+import { penyakitColumns } from "./columns";
 import React, { useEffect } from "react";
 import {
   closestCenter,
@@ -63,21 +63,17 @@ import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { DraggableRow } from "@/components/data-table";
 
-interface PasienTableProps {
-  id: string;
-  fullName: string;
-  email: string;
-  companyName: string;
-  phone: string;
-  address: string;
+interface TableProps {
+  kd_penyakit: string;
+  nama_penyakit: string;
 }
 
-interface PasienTableState {
-  data: PasienTableProps[];
+interface TableState {
+  data: TableProps[];
   isLoading: boolean;
 }
 
-export function PasienTable({data, isLoading}: PasienTableState) {
+export function PenyakitTable({data, isLoading}: TableState) {
   const router = useRouter();
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -94,7 +90,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
 
   const table = useReactTable({
     data: data,
-    columns: visitorColumns,
+    columns: penyakitColumns,
     state: {
       sorting,
       columnVisibility,
@@ -108,11 +104,11 @@ export function PasienTable({data, isLoading}: PasienTableState) {
       const value = filterValue.toLowerCase();
 
       return (
-        row.original.fullName.toLowerCase().includes(value) ||
-        row.original.email.toLowerCase().includes(value)
+        row.original.kd_penyakit.toLowerCase().includes(value) ||
+        row.original.nama_penyakit.toLowerCase().includes(value)
       );
     },
-    getRowId: (row) => row.id.toString(),
+    getRowId: (row) => row.kd_penyakit.toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -127,7 +123,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const dataIds = data.map((row) => row.id.toString());
+  const dataIds = data.map((row) => row.kd_penyakit.toString());
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -142,20 +138,20 @@ export function PasienTable({data, isLoading}: PasienTableState) {
   //   }
   // }
 
-  // const handleAddGuest = () => {
-  //   router.push("/guest/create-guest");
-  // };
+  const handleAdd = () => {
+    router.push("/penyakit/create");
+  };
 
   return (
     <Tabs defaultValue="outline" className="w-full flex-col gap-6">
-      {/* <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="flex items-center justify-between px-4 lg:px-6">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleAddGuest}>
+          <Button variant="outline" size="sm" onClick={handleAdd}>
             <IconPlus />
-            <span className="hidden lg:inline">Add Guest</span>
+            <span className="hidden lg:inline">Add Penyakit</span>
           </Button>
         </div>
-      </div> */}
+      </div>
 
       {isLoading && data.length === 0 ? (
         <div className="flex h-full items-center justify-center">
@@ -213,7 +209,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
                   ) : (
                     <TableRow>
                       <TableCell
-                        colSpan={visitorColumns.length}
+                        colSpan={penyakitColumns.length}
                         className="h-24 text-center"
                       >
                         No results.

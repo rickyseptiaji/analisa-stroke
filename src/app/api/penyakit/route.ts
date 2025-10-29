@@ -1,11 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
+export async function GET() {
+  try {
+    const res = await prisma.penyakit.findMany({
+      orderBy: {
+        kd_penyakit: "desc",
+      },
+    });
+    return NextResponse.json(res, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Terjadi kesalahan saat mengambil data" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { kd_penyakit, nama_penyakit, solusi } = await req.json();
+    const { kd_penyakit, nama_penyakit } = await req.json();
 
-    if (!kd_penyakit || !nama_penyakit || !solusi) {
+    if (!kd_penyakit || !nama_penyakit) {
       return NextResponse.json(
         { error: "Semua field wajib diisi!" },
         { status: 400 }
@@ -24,7 +40,6 @@ export async function POST(req: NextRequest) {
       data: {
         kd_penyakit,
         nama_penyakit,
-        solusi,
       },
     });
     return NextResponse.json(penyakit, { status: 201 });
