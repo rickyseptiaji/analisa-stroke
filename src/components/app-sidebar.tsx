@@ -47,21 +47,21 @@ const data = {
     },
     {
       title: "Pasien",
-      url: "#",
+      url: "/pasien",
       icon: IconListDetails,
-      items: [
-        { title: "Data Pasien", url: "/pasien" },
-        { title: "Tambah Pasien", url: "/pasien/create" },
-      ],
+      // items: [
+      //   { title: "Data Pasien", url: "/pasien" },
+      //   { title: "Tambah Pasien", url: "/pasien/create" },
+      // ],
     },
     {
       title: "Gejala",
-      url: "#",
+      url: "/gejala",
       icon: IconChartBar,
-      items: [
-        { title: "Data Gejala", url: "#" },
-        { title: "Tambah Gejala", url: "#" },
-      ],
+      // items: [
+      //   { title: "Data Gejala", url: "#" },
+      //   { title: "Tambah Gejala", url: "#" },
+      // ],
     },
     {
       title: "Penyakit & Solusi",
@@ -76,16 +76,16 @@ const data = {
       title: "Pengetahuan",
       url: "#",
       icon: IconChartBar,
-      items: [
-        { title: "Data Pengetahuan", url: "#" },
-        { title: "Tambah Pengetahuan", url: "#" },
-      ],
+      // items: [
+      //   { title: "Data Pengetahuan", url: "#" },
+      //   { title: "Tambah Pengetahuan", url: "#" },
+      // ],
     },
     {
       title: "Konsultasi",
       url: "#",
       icon: IconChartBar,
-      items: [{ title: "Diagnosa Gejala", url: "#" }],
+      // items: [{ title: "Diagnosa Gejala", url: "#" }],
     },
     // {
     //   title: "Riwayat Pasien",

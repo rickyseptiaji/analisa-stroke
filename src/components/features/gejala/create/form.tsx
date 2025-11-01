@@ -10,41 +10,53 @@ import {
   Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const formSchema = z.object({
-  kd_penyakit: z.string().min(3, {
+  kd_gejala: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
   }),
-  nama_penyakit: z.string().min(5, {
-    message: "nama penyakit must be at least 5 characters.",
+  nama_gejala: z.string().min(3, {
+    message: "kode penyakit must be at least 3 characters.",
   }),
+  poin_gejala: z.string(),
 });
-export default function PenyakitCreateForm() {
+export default function GejalaCreateForm() {
   const [isLoading, setIsloading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      kd_penyakit: "",
-      nama_penyakit: "",
+      kd_gejala: "",
+      nama_gejala: "",
+      poin_gejala: "",
     },
   });
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { kd_penyakit, nama_penyakit } = values;
+    const { kd_gejala, nama_gejala, poin_gejala } = values;
     try {
       setIsloading(true);
-      const res = await fetch("/api/penyakit", {
+      const res = await fetch("/api/gejala", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          kd_penyakit,
-          nama_penyakit,
+          kd_gejala,
+          nama_gejala,
+          poin_gejala,
         }),
       });
       if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
@@ -62,34 +74,47 @@ export default function PenyakitCreateForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="kd_penyakit"
+            name="kd_gejala"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Kode Penyakit</FormLabel>
+                <FormLabel>Kode Gejala</FormLabel>
                 <FormControl>
-                  <Input placeholder="Kode Penyakit" {...field} />
+                  <Input placeholder="Kode Gejala" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-       <FormField
+          <FormField
             control={form.control}
-            name="nama_penyakit"
+            name="nama_gejala"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nama Penyakit</FormLabel>
+                <FormLabel>Nama Gejala</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Masukkan Gejala" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="poin_gejala"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Poin Gejala</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih Nama Penyakit" />
+                      <SelectValue placeholder="Pilih Poin Gejala" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="Stroke Ringan">Stroke Ringan</SelectItem>
-                      <SelectItem value="Stroke Sedang">Stroke Sedang</SelectItem>
-                      <SelectItem value="Stroke Berat">Stroke Berat</SelectItem>
+                      <SelectItem value="Ringan">Ringan</SelectItem>
+                      <SelectItem value="Sedang">Sedang</SelectItem>
+                      <SelectItem value="Berat">Berat</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

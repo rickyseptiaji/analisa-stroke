@@ -15,7 +15,7 @@ import {
   type RowSelectionState,
   type PaginationState,
 } from "@tanstack/react-table";
-import { visitorColumns } from "./columns";
+import { gejalaColumns } from "./columns";
 import React, { useEffect } from "react";
 import {
   closestCenter,
@@ -63,21 +63,18 @@ import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { DraggableRow } from "@/components/data-table";
 
-interface PasienTableProps {
-  id: string;
-  fullName: string;
-  email: string;
-  companyName: string;
-  phone: string;
-  address: string;
+interface TableProps {
+  kd_gejala: string;
+  nama_gejala: string;
+  poin_gejala: string;
 }
 
-interface PasienTableState {
-  data: PasienTableProps[];
+interface TableState {
+  data: TableProps[];
   isLoading: boolean;
 }
 
-export function PasienTable({data, isLoading}: PasienTableState) {
+export function GejalaTable({ data, isLoading }: TableState) {
   const router = useRouter();
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -94,7 +91,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
 
   const table = useReactTable({
     data: data,
-    columns: visitorColumns,
+    columns: gejalaColumns,
     state: {
       sorting,
       columnVisibility,
@@ -108,11 +105,12 @@ export function PasienTable({data, isLoading}: PasienTableState) {
       const value = filterValue.toLowerCase();
 
       return (
-        row.original.fullName.toLowerCase().includes(value) ||
-        row.original.email.toLowerCase().includes(value)
+        row.original.kd_gejala.toLowerCase().includes(value) ||
+        row.original.nama_gejala.toLowerCase().includes(value) ||
+        row.original.poin_gejala.toLowerCase().includes(value)
       );
     },
-    getRowId: (row) => row.id.toString(),
+    getRowId: (row) => row.kd_gejala.toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -127,7 +125,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const dataIds = data.map((row) => row.id.toString());
+  const dataIds = data.map((row) => row.kd_gejala.toString());
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -143,7 +141,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
   // }
 
   const handleAdd = () => {
-    router.push("/pasien/create");
+    router.push("/gejala/create");
   };
 
   return (
@@ -152,7 +150,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={handleAdd}>
             <IconPlus />
-            <span className="hidden lg:inline">Add Pasien</span>
+            <span className="hidden lg:inline">Add Gejala</span>
           </Button>
         </div>
       </div>
@@ -213,7 +211,7 @@ export function PasienTable({data, isLoading}: PasienTableState) {
                   ) : (
                     <TableRow>
                       <TableCell
-                        colSpan={visitorColumns.length}
+                        colSpan={gejalaColumns.length}
                         className="h-24 text-center"
                       >
                         No results.

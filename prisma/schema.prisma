@@ -38,7 +38,7 @@ model Pasien {
 model Gejala {
   kd_gejala   String   @unique @db.VarChar(10)
   nama_gejala String   @db.VarChar(50)
-  poin_Gejala String?
+  poin_gejala String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
