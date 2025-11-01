@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       data: {
         kd_gejala,
         nama_gejala,
-        poin_Gejala: poin_gejala,
+        poin_gejala,
       },
     });
     return NextResponse.json(data);

@@ -26,7 +26,7 @@ CREATE TABLE "public"."Pasien" (
 CREATE TABLE "public"."Gejala" (
     "kd_gejala" VARCHAR(10) NOT NULL,
     "nama_gejala" VARCHAR(50) NOT NULL,
-    "poin_Gejala" TEXT,
+    "poin_gejala" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL
 );

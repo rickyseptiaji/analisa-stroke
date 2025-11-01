@@ -24,7 +24,7 @@ export const gejalaColumns: ColumnDef<any>[] = [
     header: "Solusi",
   },
     {
-    accessorKey: "poin_Gejala",
+    accessorKey: "poin_gejala",
     header: "Poin Gejala",
   },
 
