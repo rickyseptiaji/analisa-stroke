@@ -54,6 +54,7 @@ export default function PengetahuanCreateForm() {
     },
   });
   async function fetchKdPenyakit() {
+    setGejalaLoading(true);
     try {
       const res = await fetch("/api/penyakit");
       if (!res.ok) throw new Error("Gagal mengambil data penyakit.");
@@ -73,6 +74,7 @@ export default function PengetahuanCreateForm() {
     }
   }
   async function fetchKdGejala() {
+    setGejalaLoading(true);
     try {
       const res = await fetch("/api/gejala");
       if (!res.ok) throw new Error("Gagal mengambil data gejala.");
@@ -120,10 +122,7 @@ export default function PengetahuanCreateForm() {
       setIsloading(false);
     }
   }
-  if (
-    (loadingPenyakit && penyakitOptions.length) ||
-    (loadingGejala && penyakitOptions.length != null)
-  ) {
+  if (loadingPenyakit || loadingGejala) {
     return (
       <div className="flex h-full items-center justify-center">
         <LoadingSpinner />
