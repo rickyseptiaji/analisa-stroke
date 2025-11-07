@@ -74,7 +74,7 @@ const data = {
     },
     {
       title: "Pengetahuan",
-      url: "#",
+      url: "/pengetahuan",
       icon: IconChartBar,
       // items: [
       //   { title: "Data Pengetahuan", url: "#" },
