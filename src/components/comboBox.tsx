@@ -35,7 +35,7 @@ export function Combobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="w-[250px] justify-between">
-          {selected ? selected.label : "Pilih penyakit..."}
+          {selected ? selected.label : "Pilih"}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -43,7 +43,7 @@ export function Combobox({
       <PopoverContent className="w-[250px] p-0">
         <Command>
           <CommandInput
-            placeholder="Cari penyakit..."
+            placeholder="Cari"
             onValueChange={(q) => onSearch && onSearch(q)}
           />
           <CommandList>

@@ -17,6 +17,14 @@ import z from "zod";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Combobox } from "@/components/comboBox";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 const formSchema = z.object({
   kd_penyakit: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -45,12 +53,10 @@ export default function SolusiCreateForm() {
         const res = await fetch("/api/penyakit");
         if (!res.ok) throw new Error("Gagal mengambil data penyakit.");
         const data = await res.json();
-
         const options = data.map((item: any) => ({
           value: item.kd_penyakit,
           label: item.nama_penyakit,
         }));
-
         setPenyakitOptions(options);
       } catch (err: any) {
         setError(err.message);
@@ -84,63 +90,64 @@ export default function SolusiCreateForm() {
       setIsloading(false);
     }
   }
+
+  if (loadingPenyakit)
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          {loadingPenyakit && (
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <LoadingSpinner className="w-4 h-4" />
-              <span>Memuat daftar penyakit...</span>
-            </div>
-          )}
-          {error && (
-            <p className="text-red-500 text-sm">Gagal memuat data: {error}</p>
-          )}
-          {!loadingPenyakit && !error && (
-            <>
-              <FormField
-                control={form.control}
-                name="kd_penyakit"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Kode Penyakit</FormLabel>
-                    <FormControl>
-                      <Combobox
-                        value={field.value}
-                        onChange={field.onChange}
-                        options={penyakitOptions}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="solusi"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Solusi</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Masukkan solusi" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <LoadingSpinner className="w-4 h-4" />
-                    <span>Menyimpan...</span>
-                  </div>
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </>
-          )}
+          <FormField
+            control={form.control}
+            name="kd_penyakit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Kode Penyakit</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Pilih Kode Penyakit" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {penyakitOptions.map((map) => (
+                      <SelectGroup>
+                        <SelectItem value={map.value}>{map.value}</SelectItem>
+                      </SelectGroup>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="solusi"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Solusi</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Masukkan solusi" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <LoadingSpinner className="w-4 h-4" />
+                <span>Menyimpan...</span>
+              </div>
+            ) : (
+              "Submit"
+            )}
+          </Button>
         </form>
       </Form>
     </>

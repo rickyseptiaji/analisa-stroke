@@ -83,7 +83,7 @@ const data = {
     },
     {
       title: "Konsultasi",
-      url: "#",
+      url: "/konsultasi",
       icon: IconChartBar,
       // items: [{ title: "Diagnosa Gejala", url: "#" }],
     },
