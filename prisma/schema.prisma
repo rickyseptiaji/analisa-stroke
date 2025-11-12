@@ -43,7 +43,6 @@ model Gejala {
   updatedAt   DateTime @updatedAt
 
   pengetahuan Pengetahuan[] @relation("GejalaToPengetahuan")
-  relasi      Relasi[]      @relation("GejalaToRelasi")
   hasil       Hasil[]       @relation("GejalaToHasil")
 }
 
@@ -51,7 +50,6 @@ model Penyakit {
   kd_penyakit   String @unique @db.VarChar(10)
   nama_penyakit String @db.VarChar(50)
   pengetahuan Pengetahuan[] @relation("PenyakitToPengetahuan")
-  relasi      Relasi[]      @relation("PenyakitToRelasi")
   hasil       Hasil[]       @relation("PenyakitToHasil")
   solusi      Solusi[]      @relation("PenyakitToSolusi")
 }
@@ -72,17 +70,6 @@ model Pengetahuan {
   penyakit Penyakit @relation("PenyakitToPengetahuan", fields: [kd_penyakit], references: [kd_penyakit])
 }
 
-model Relasi {
-  id          Int    @id @unique @default(autoincrement())
-  kd_gejala   String @db.VarChar(10)
-  kd_penyakit String @db.VarChar(10)
-
-  gejala   Gejala   @relation("GejalaToRelasi", fields: [kd_gejala], references: [kd_gejala])
-  penyakit Penyakit @relation("PenyakitToRelasi", fields: [kd_penyakit], references: [kd_penyakit])
-  hasil    Hasil[]  @relation("RelasiToHasil")
-
-  @@unique([kd_gejala, kd_penyakit])
-}
 
 model Hasil {
   id          Int    @id @unique @default(autoincrement())
@@ -95,5 +82,4 @@ model Hasil {
   pasien   Pasien   @relation(fields: [pasienId], references: [id])
   gejala   Gejala   @relation("GejalaToHasil", fields: [kd_gejala], references: [kd_gejala])
   penyakit Penyakit @relation("PenyakitToHasil", fields: [kd_penyakit], references: [kd_penyakit])
-  relasi   Relasi?  @relation("RelasiToHasil", fields: [kd_gejala, kd_penyakit], references: [kd_gejala, kd_penyakit])
 }

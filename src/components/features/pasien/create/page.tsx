@@ -2,7 +2,7 @@ import { MainLayout } from "@/layout/mainLayout";
 import PasienCreateForm from "./form";
 
 export default function CreatePagePasien() {
-  return (
+  return (  
     <>
       <MainLayout title="Tambah Pasien">
         <div className="flex items-center justify-center">

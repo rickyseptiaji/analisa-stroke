@@ -55,15 +55,6 @@ const data = {
       // ],
     },
     {
-      title: "Gejala",
-      url: "/gejala",
-      icon: IconChartBar,
-      // items: [
-      //   { title: "Data Gejala", url: "#" },
-      //   { title: "Tambah Gejala", url: "#" },
-      // ],
-    },
-    {
       title: "Penyakit & Solusi",
       url: "#",
       icon: IconChartBar,
@@ -72,6 +63,16 @@ const data = {
         { title: "Solusi", url: "/solusi" },
       ],
     },
+    {
+      title: "Gejala",
+      url: "/gejala",
+      icon: IconChartBar,
+      // items: [
+      //   { title: "Data Gejala", url: "#" },
+      //   { title: "Tambah Gejala", url: "#" },
+      // ],
+    },
+
     {
       title: "Pengetahuan",
       url: "/pengetahuan",

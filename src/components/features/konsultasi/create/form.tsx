@@ -9,170 +9,184 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Combobox } from "@/components/comboBox";
+
 const formSchema = z.object({
-  pasien: z.string(),
-  nama_gejala: z.string().min(3, {
-    message: "kode penyakit must be at least 3 characters.",
-  }),
-  poin_gejala: z.string(),
+  pasien: z.string().min(1, "Pilih pasien terlebih dahulu"),
+  jawaban: z.array(z.string()).optional(),
 });
+
 export default function KonsultasiCreateForm() {
   const [isLoading, setIsloading] = useState(false);
-  const [dataPasien, setDataPasien] = useState([]);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [dataPasien, setDataPasien] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [dataGejala, setDataGejala] = useState<
+    { kd_gejala: string; nama_gejala: string }[]
+  >([]);
+  const [showPertanyaan, setShowPertanyaan] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       pasien: "",
-      nama_gejala: "",
-      poin_gejala: "",
+      jawaban: [],
     },
   });
 
   const fetchPasien = async () => {
-    try {
-      const response = await fetch("/api/pasien");
-      if (!response.ok) {
-        throw new Error("Failed to fetch pasien data");
-      }
-      const data = await response.json();
-      const options = data.map((item: any) => ({
-        value: item.id,
-        label: item.nama_lengkap,
-      }));
-      setDataPasien(options);
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch("/api/pasien");
+    if (!response.ok) throw new Error("Gagal mengambil data pasien");
+    const data = await response.json();
+    const options = data.map((item: any) => ({
+      value: item.id.toString(),
+      label: item.nama_lengkap,
+    }));
+    setDataPasien(options);
   };
 
+  const fetchGejala = async () => {
+    const response = await fetch("/api/gejala");
+    if (!response.ok) throw new Error("Gagal mengambil data gejala");
+    const data = await response.json();
+    setDataGejala(data);
+  };
   useEffect(() => {
-    fetchPasien();
+    const loadData = async () => {
+      try {
+        setIsLoadingData(true);
+        await Promise.all([fetchPasien(), fetchGejala()]);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoadingData(false);
+      }
+    };
+    loadData();
   }, []);
 
+  useEffect(() => {
+    setShowPertanyaan(!!form.watch("pasien"));
+  }, [form.watch("pasien")]);
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { pasien, nama_gejala, poin_gejala } = values;
     try {
       setIsloading(true);
-      const res = await fetch("/api/gejala", {
+      const res = await fetch("/api/hasil", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          pasien,
-          nama_gejala,
-          poin_gejala,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
+
+      if (!res.ok) throw new Error("Gagal menyimpan data");
+      alert("Data konsultasi berhasil disimpan!");
       form.reset();
-      alert("Data penyakit berhasil ditambahkan!");
+      setShowPertanyaan(false);
     } catch (error) {
-      console.log("error", error);
+      console.error(error);
     } finally {
       setIsloading(false);
     }
   }
+
+  if (isLoadingData) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="pasien"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Pasien</FormLabel>
-                <FormControl>
-                  <Combobox
-                    value={field.value}
-                    onChange={field.onChange}
-                    options={dataPasien}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <FormField
-            control={form.control}
-            name="kd_gejala"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Kode Gejala</FormLabel>
-                <FormControl>
-                  <Input placeholder="Kode Gejala" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          <FormField
-            control={form.control}
-            name="nama_gejala"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nama Gejala</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Masukkan Gejala" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="poin_gejala"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Poin Gejala</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Pilih Poin Gejala" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="Ringan">Ringan</SelectItem>
-                      <SelectItem value="Sedang">Sedang</SelectItem>
-                      <SelectItem value="Berat">Berat</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <div className="flex items-center justify-center gap-2">
-                <LoadingSpinner className="w-4 h-4" />
-                <span>Menyimpan...</span>
-              </div>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </form>
-      </Form>
-    </>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="pasien"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Pasien</FormLabel>
+              <FormControl>
+                <Combobox
+                  value={field.value}
+                  onChange={(val) => field.onChange(val)}
+                  options={dataPasien}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {showPertanyaan && (
+          <div className="space-y-2">
+            <div className="border rounded-lg overflow-hidden">
+              <table className="w-full border-collapse text-sm">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2 text-left w-[80%]">Pertanyaan</th>
+                    <th className="border p-2 text-center w-[20%]">Ceklis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataGejala.map((item) => (
+                    <FormField
+                      key={item.kd_gejala}
+                      control={form.control}
+                      name="jawaban"
+                      render={({ field }) => {
+                        const checked = field.value?.includes(item.kd_gejala);
+                        return (
+                          <tr key={item.kd_gejala} className="hover:bg-gray-50">
+                            <td className="border p-2">{item.nama_gejala}</td>
+                            <td className="border text-center">
+                              <FormControl>
+                                <Checkbox
+                                  checked={checked}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([
+                                          ...(field.value || []),
+                                          item.kd_gejala,
+                                        ])
+                                      : field.onChange(
+                                          field.value?.filter(
+                                            (value) => value !== item.kd_gejala
+                                          )
+                                        );
+                                  }}
+                                />
+                              </FormControl>
+                            </td>
+                          </tr>
+                        );
+                      }}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <div className="flex items-center justify-center gap-2">
+              <LoadingSpinner className="w-4 h-4" />
+              <span>Menyimpan...</span>
+            </div>
+          ) : (
+            "Submit"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 }
