@@ -17,11 +17,11 @@ export const gejalaColumns: ColumnDef<any>[] = [
   // },
   {
     accessorKey: "kd_gejala",
-    header: "Kode Penyakit",
+    header: "Kode Gejala",
   },
   {
     accessorKey: "nama_gejala",
-    header: "Solusi",
+    header: "Nama Gejala",
   },
     {
     accessorKey: "poin_gejala",

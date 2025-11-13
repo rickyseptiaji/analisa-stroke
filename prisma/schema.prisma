@@ -62,7 +62,8 @@ model Solusi {
 }
 
 model Pengetahuan {
-  kd_pengetahuan String @unique @db.VarChar(10)
+  id Int @id @unique @default(autoincrement())
+  kd_pengetahuan String  @db.VarChar(10)
   kd_gejala      String @db.VarChar(10)
   kd_penyakit    String @db.VarChar(10)
 
