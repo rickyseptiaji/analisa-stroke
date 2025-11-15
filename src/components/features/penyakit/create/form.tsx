@@ -87,9 +87,9 @@ export default function PenyakitCreateForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="Stroke Ringan">Stroke Ringan</SelectItem>
-                      <SelectItem value="Stroke Sedang">Stroke Sedang</SelectItem>
-                      <SelectItem value="Stroke Berat">Stroke Berat</SelectItem>
+                      <SelectItem value="ringan">Stroke Ringan</SelectItem>
+                      <SelectItem value="sedang">Stroke Sedang</SelectItem>
+                      <SelectItem value="berat">Stroke Berat</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

@@ -112,9 +112,9 @@ export default function GejalaCreateForm() {
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectItem value="Ringan">Ringan</SelectItem>
-                      <SelectItem value="Sedang">Sedang</SelectItem>
-                      <SelectItem value="Berat">Berat</SelectItem>
+                      <SelectItem value="ringan">Ringan</SelectItem>
+                      <SelectItem value="sedang">Sedang</SelectItem>
+                      <SelectItem value="berat">Berat</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

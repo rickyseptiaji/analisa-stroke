@@ -18,7 +18,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Combobox } from "@/components/comboBox";
 
 const formSchema = z.object({
-  pasien: z.string().min(1, "Pilih pasien terlebih dahulu"),
+  pasienId: z.string().min(1, "Pilih pasien terlebih dahulu"),
   jawaban: z.array(z.string()).optional(),
 });
 
@@ -36,7 +36,7 @@ export default function KonsultasiCreateForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pasien: "",
+      pasienId: "",
       jawaban: [],
     },
   });
@@ -73,13 +73,13 @@ export default function KonsultasiCreateForm() {
   }, []);
 
   useEffect(() => {
-    setShowPertanyaan(!!form.watch("pasien"));
-  }, [form.watch("pasien")]);
+    setShowPertanyaan(!!form.watch("pasienId"));
+  }, [form.watch("pasienId")]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsloading(true);
-      const res = await fetch("/api/hasil", {
+      const res = await fetch("/api/konsultasi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -109,7 +109,7 @@ export default function KonsultasiCreateForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="pasien"
+          name="pasienId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pasien</FormLabel>
