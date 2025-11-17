@@ -14,7 +14,6 @@ const rules = [
 export async function POST(req: NextRequest) {
   try {
     const { pasienId, jawaban } = await req.json();
-    console.log(pasienId)
     if (!jawaban || !Array.isArray(jawaban)) {
       return NextResponse.json(
         { message: "jawaban harus berupa array" },
@@ -50,12 +49,25 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Internal server error:", error);
     return NextResponse.json(
       { message: "internal server error", error: String(error) },
       {
         status: 500,
       }
     );
+  }
+}
+
+
+export async function GET() {
+  try {
+    const res = await prisma.hasil.findMany({
+      include: {
+        pasien: true
+      }
+    })
+    return NextResponse.json(res)
+  } catch (error) {
+    return NextResponse.json(error)
   }
 }

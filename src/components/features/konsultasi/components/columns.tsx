@@ -11,31 +11,59 @@ export const konsultasiColumns: ColumnDef<any>[] = [
       row.index +
       1,
   },
-  // {
-  //   accessorKey: "id",
-  //   header: "ID",
-  // },
   {
-    accessorKey: "kd_gejala",
+    id: "nik",
+    header: "NIK",
+    accessorFn: (row) => row.pasien?.nik ?? "-",
+  },
+  {
+    id: "nama",
+    header: "Nama Lengkap",
+    accessorFn: (row) => row.pasien?.nama_lengkap ?? "-",
+  },
+  {
+    id: "tanggal_lahir",
+    header: "Tanggal Lahir",
+    accessorFn: (row) => row.pasien?.tanggal_lahir ?? null,
+    cell: ({ row }) => {
+      const tgl = row.original.pasien?.tanggal_lahir;
+      return tgl ? new Date(tgl).toLocaleDateString("id-ID") : "-";
+    },
+  },
+  {
+    id: "jenis_kelamin",
+    header: "Jenis Kelamin",
+    accessorFn: (row) =>
+      row.pasien?.jenis_kelamin === "L"
+        ? "Laki-laki"
+        : row.pasien?.jenis_kelamin === "P"
+        ? "Perempuan"
+        : "-",
+  },
+  {
+    id: "phone",
+    header: "No Telp",
+    accessorFn: (row) => row.pasien?.phone ?? "-",
+  },
+  {
+    id: "alamat",
+    header: "Alamat",
+    accessorFn: (row) => row.pasien?.alamat ?? "-",
+  },
+  {
+    id: "kd_penyakit",
     header: "Kode Penyakit",
+    accessorFn: (row) => row.kd_penyakit ?? "-",
   },
-  {
-    accessorKey: "nama_gejala",
-    header: "Solusi",
-  },
-    {
-    accessorKey: "poin_gejala",
-    header: "Poin Gejala",
-  },
-
   {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => (
       <TableActions
         id={row.original.id}
-        editPath="/employee/edit"
-        deletePath="employee"
+        editPath="/konsultasi/edit"
+        deletePath="konsultasi"
+        printPath="/konsultasi/print"
       />
     ),
   },

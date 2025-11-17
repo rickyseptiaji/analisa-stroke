@@ -63,10 +63,26 @@ import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { DraggableRow } from "@/components/data-table";
 
+interface Pasien {
+  id: number;
+  nik: string;
+  nama_lengkap: string;
+  tanggal_lahir: string | null;
+  umur?: number;
+  jenis_kelamin?: string
+  phone?: string;
+  alamat?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 interface TableProps {
-  kd_gejala: string;
-  nama_gejala: string;
-  poin_gejala: string;
+  id: number;
+  pasienId: number;
+  kd_penyakit: string;
+  createdAt?: string;
+  updatedAt?: string;
+  pasien?: Pasien | null;
 }
 
 interface TableState {
@@ -103,14 +119,15 @@ export function KonsultasiTable({ data, isLoading }: TableState) {
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: (row, columnId, filterValue) => {
       const value = filterValue.toLowerCase();
-
+  const pasien = row.original.pasien;
       return (
-        row.original.kd_gejala.toLowerCase().includes(value) ||
-        row.original.nama_gejala.toLowerCase().includes(value) ||
-        row.original.poin_gejala.toLowerCase().includes(value)
+      String(row.original.kd_penyakit ?? "").toLowerCase().includes(value) ||
+        String(pasien?.nik ?? "").toLowerCase().includes(value) ||
+        String(pasien?.nama_lengkap ?? "").toLowerCase().includes(value) ||
+        String(pasien?.phone ?? "").toLowerCase().includes(value)
       );
     },
-    getRowId: (row) => row.kd_gejala.toString(),
+    getRowId: (row) => String(row.id),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -125,7 +142,7 @@ export function KonsultasiTable({ data, isLoading }: TableState) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const dataIds = data.map((row) => row.kd_gejala.toString());
+  const dataIds = data.map((row) => String(row.id));
 
   const sensors = useSensors(useSensor(PointerSensor));
 
