@@ -67,7 +67,9 @@ export const TableActions = ({
 
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
-          <DropdownMenuItem onClick={handlePrint}>Print</DropdownMenuItem>
+          {printPath && (
+            <DropdownMenuItem onClick={handlePrint}>Print</DropdownMenuItem>
+          )}
 
           <DropdownMenuSeparator />
 
