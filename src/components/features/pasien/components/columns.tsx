@@ -46,8 +46,8 @@ export const visitorColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <TableActions
         id={row.original.id}
-        editPath="/employee/edit"
-        deletePath="employee"
+        editPath="/pasien/edit"
+        deletePath="pasien"
       />
     ),
   },

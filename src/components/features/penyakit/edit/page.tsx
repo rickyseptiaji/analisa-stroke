@@ -1,12 +1,16 @@
 import { MainLayout } from "@/layout/mainLayout";
-import PasienEditForm from "./form";
+import PenyakitEditForm from "./form";
 
-export default function EditPagePasien({pasienId}: {pasienId: string}) {
+export default function EditPagePenyakit({
+  penyakitId,
+}: {
+  penyakitId: string;
+}) {
   return (
-    <MainLayout title="Edit Pasien">
+    <MainLayout title="Edit Penyakit">
       <div className="flex items-center justify-center">
         <div className="w-full max-x-md px-4 mx-auto">
-          <PasienEditForm pasienId={pasienId} />
+          <PenyakitEditForm penyakitId={penyakitId} />
         </div>
       </div>
     </MainLayout>

@@ -3,13 +3,13 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_penyakit: string }> }
 ) {
-  const { id } = params;
+  const { kd_penyakit } = await params;
   try {
     const penyakit = await prisma.penyakit.findUnique({
       where: {
-        kd_penyakit: id,
+        kd_penyakit: kd_penyakit,
       },
     });
 
@@ -35,14 +35,14 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_penyakit: string }> }
 ) {
-  const { id } = params;
+  const { kd_penyakit } = await params;
   const body = await req.json();
   try {
     const updated = await prisma.penyakit.update({
       where: {
-        kd_penyakit: id,
+        kd_penyakit: kd_penyakit,
       },
       data: body,
     });
@@ -60,13 +60,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_penyakit: string }> }
 ) {
-  const { id } = params;
+  const { kd_penyakit } = await params;
   try {
     const penyakit = await prisma.penyakit.findUnique({
       where: {
-        kd_penyakit: id,
+        kd_penyakit: kd_penyakit,
       },
     });
 
@@ -83,7 +83,7 @@ export async function DELETE(
 
     await prisma.penyakit.delete({
       where: {
-        kd_penyakit: id,
+        kd_penyakit: kd_penyakit,
       },
     });
 
