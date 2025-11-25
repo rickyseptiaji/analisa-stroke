@@ -30,7 +30,7 @@ export const penyakitColumns: ColumnDef<any>[] = [
     header: "Actions",
     cell: ({ row }) => (
       <TableActions
-        id={row.original.id}
+        id={row.original.kd_penyakit}
         editPath="/penyakit/edit"
         deletePath="penyakit"
       />

@@ -35,8 +35,9 @@ export default function PenyakitEditForm({
   penyakitId: string;
 }) {
   const [isLoading, setIsloading] = useState(false);
-
+  const [dataPenyakit, setDataPenyakit] = useState(true);
   async function fetchPenyakit() {
+    setDataPenyakit(true);
     try {
       const res = await fetch(`/api/penyakit/${penyakitId}`);
       const data = await res.json();
@@ -46,6 +47,8 @@ export default function PenyakitEditForm({
       });
     } catch (error) {
       console.log("error", error);
+    } finally {
+      setDataPenyakit(false);
     }
   }
 
@@ -82,6 +85,14 @@ export default function PenyakitEditForm({
     } finally {
       setIsloading(false);
     }
+  }
+
+  if (dataPenyakit) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   }
   return (
     <Form {...form}>
