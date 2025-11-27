@@ -3,13 +3,13 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_gejala: string }> }
 ) {
-  const { id } = params;
+  const { kd_gejala } = await params;
   try {
     const gejala = await prisma.gejala.findUnique({
       where: {
-        kd_gejala: id,
+        kd_gejala: kd_gejala,
       },
     });
 
@@ -41,14 +41,14 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_gejala: string }> }
 ) {
-  const { id } = params;
+  const { kd_gejala } = await params;
   const body = await req.json();
   try {
     const updated = await prisma.gejala.update({
       where: {
-        kd_gejala: id,
+        kd_gejala: kd_gejala,
       },
       data: body,
     });
@@ -70,13 +70,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ kd_gejala: string }> }
 ) {
-  const {id} = params;
+  const { kd_gejala } = await params;
   try {
     const gejala = await prisma.gejala.findUnique({
       where: {
-        kd_gejala: id,
+        kd_gejala: kd_gejala,
       },
     });
 
@@ -93,7 +93,7 @@ export async function DELETE(
 
     await prisma.gejala.delete({
       where: {
-        kd_gejala: id,
+        kd_gejala: kd_gejala,
       },
     });
 

@@ -33,9 +33,9 @@ export const gejalaColumns: ColumnDef<any>[] = [
     header: "Actions",
     cell: ({ row }) => (
       <TableActions
-        id={row.original.id}
-        editPath="/employee/edit"
-        deletePath="employee"
+        id={row.original.kd_gejala}
+        editPath="/gejala/edit"
+        deletePath="gejala"
       />
     ),
   },
