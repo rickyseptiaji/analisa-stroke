@@ -81,6 +81,18 @@ export async function DELETE(
       );
     }
 
+    await prisma.solusi.deleteMany({
+      where: {
+        kd_penyakit,
+      },
+    });
+
+    await prisma.pengetahuan.deleteMany({
+      where: {
+        kd_penyakit
+      }
+    })
+
     await prisma.penyakit.delete({
       where: {
         kd_penyakit: kd_penyakit,
@@ -96,6 +108,7 @@ export async function DELETE(
       }
     );
   } catch (error) {
+    console.log("error", error);
     return NextResponse.json(
       {
         message: "Internal server error",

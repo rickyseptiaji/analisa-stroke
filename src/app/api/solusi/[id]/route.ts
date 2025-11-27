@@ -3,13 +3,14 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = Number(params.id);
+  const {id} = await params;
+    const numericId = Number(id);
   try {
     const solusi = await prisma.solusi.findUnique({
       where: {
-        id: id,
+        id: numericId,
       },
     });
     if (!solusi) {
@@ -33,14 +34,15 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = Number(params.id);
+  const {id} = await params;
+  const numericId = Number(id)
   const body = await req.json();
   try {
     const updated = await prisma.solusi.update({
       where: {
-        id: id,
+        id: numericId,
       },
       data: body,
     });
@@ -62,13 +64,14 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = Number(params.id);
+  const {id} = await params;
+  const numericId = Number(id)
   try {
     const solusi = await prisma.solusi.findUnique({
       where: {
-        id: id,
+        id: numericId,
       },
     });
 
@@ -84,7 +87,7 @@ export async function DELETE(
     }
     await prisma.solusi.delete({
       where: {
-        id: id,
+        id: numericId,
       },
     });
 
