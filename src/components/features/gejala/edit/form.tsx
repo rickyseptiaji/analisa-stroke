@@ -71,7 +71,7 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
     try {
       setIsloading(true);
       const res = await fetch("/api/gejala", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
