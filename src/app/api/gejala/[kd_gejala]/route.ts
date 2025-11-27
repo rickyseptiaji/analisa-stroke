@@ -6,6 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ kd_gejala: string }> }
 ) {
   const { kd_gejala } = await params;
+
   try {
     const gejala = await prisma.gejala.findUnique({
       where: {

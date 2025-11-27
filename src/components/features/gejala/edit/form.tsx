@@ -70,7 +70,7 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
     const { kd_gejala, nama_gejala, poin_gejala } = values;
     try {
       setIsloading(true);
-      const res = await fetch("/api/gejala", {
+      const res = await fetch(`/api/gejala/${gejalaId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -81,9 +81,9 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
           poin_gejala,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
+      if (!res.ok) throw new Error("Gagal menambahkan data gejala");
       form.reset();
-      alert("Data penyakit berhasil ditambahkan!");
+      alert("Data gejala berhasil diupdate!");
     } catch (error) {
       console.log("error", error);
     } finally {
