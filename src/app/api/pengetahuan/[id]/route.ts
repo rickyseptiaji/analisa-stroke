@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const id = Number(params.id);
+export async function GET(req: Request, context: any) {
+  const id = Number(context.params.id);
 
   try {
     const pengetahuan = await prisma.pengetahuan.findUnique({
@@ -19,20 +16,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(pengetahuan, { status: 200 });
+    return NextResponse.json(pengetahuan);
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const id = Number(params.id);
+export async function PATCH(req: Request, context: any) {
+  const id = Number(context.params.id);
   const body = await req.json();
 
   try {
@@ -41,20 +32,14 @@ export async function PATCH(
       data: body,
     });
 
-    return NextResponse.json(updated, { status: 200 });
+    return NextResponse.json(updated);
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  const id = Number(params.id);
+export async function DELETE(req: Request, context: any) {
+  const id = Number(context.params.id);
 
   try {
     const pengetahuan = await prisma.pengetahuan.findUnique({
@@ -72,14 +57,8 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json(
-      { message: "Data berhasil dihapus" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Data berhasil dihapus" });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
