@@ -30,8 +30,8 @@ export const solusiColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <TableActions
         id={row.original.id}
-        editPath="/employee/edit"
-        deletePath="employee"
+        editPath="/solusi/edit"
+        deletePath="solusi"
       />
     ),
   },

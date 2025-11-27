@@ -1,9 +1,9 @@
+"use client"
+
 import EditPageSolusi from "@/components/features/solusi/edit/page";
-import { useParams } from "next/navigation"
+import { useParams } from "next/navigation";
 
 export default function Page() {
-    const params  = useParams();
-    return (
-        <EditPageSolusi solusiId={params.id as string}/>
-    )
+  const params = useParams();
+  return <EditPageSolusi solusiId={params.id as string} />;
 }

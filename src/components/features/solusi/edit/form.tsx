@@ -9,14 +9,12 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Combobox } from "@/components/comboBox";
 import {
   Select,
   SelectContent,
@@ -33,12 +31,12 @@ const formSchema = z.object({
     message: "solusi must be at least 5 characters.",
   }),
 });
-export default function SolusiEditForm({solusiId}: {solusiId: string}) {
+export default function SolusiEditForm({ solusiId }: { solusiId: string }) {
   const [isLoading, setIsloading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [penyakitOptions, setPenyakitOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  const [loadingPenyakit, setLoadingPenyakit] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,32 +45,39 @@ export default function SolusiEditForm({solusiId}: {solusiId: string}) {
       solusi: "",
     },
   });
+
   useEffect(() => {
-    async function fetchPenyakit() {
+    async function loadAll() {
       try {
-        const res = await fetch("/api/penyakit");
-        if (!res.ok) throw new Error("Gagal mengambil data penyakit.");
-        const data = await res.json();
-        const options = data.map((item: any) => ({
+        const resP = await fetch("/api/penyakit");
+        const penyakit = await resP.json();
+        const options = penyakit.map((item: any) => ({
           value: item.kd_penyakit,
           label: item.nama_penyakit,
         }));
         setPenyakitOptions(options);
-      } catch (err: any) {
-        setError(err.message);
+
+        const resS = await fetch(`/api/solusi/${solusiId}`);
+        const solusi = await resS.json();
+
+        form.reset({
+          kd_penyakit: solusi.kd_penyakit,
+          solusi: solusi.solusi,
+        });
+      } catch (error) {
+        console.log("error", error);
       } finally {
-        setLoadingPenyakit(false);
+        setInitialLoading(false);
       }
     }
-
-    fetchPenyakit();
+    loadAll();
   }, []);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { kd_penyakit, solusi } = values;
     try {
       setIsloading(true);
-      const res = await fetch("/api/solusi", {
-        method: "POST",
+      const res = await fetch(`/api/solusi/${solusiId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -91,7 +96,7 @@ export default function SolusiEditForm({solusiId}: {solusiId: string}) {
     }
   }
 
-  if (loadingPenyakit)
+  if (initialLoading)
     return (
       <div className="flex h-full items-center justify-center">
         <LoadingSpinner />
@@ -114,11 +119,13 @@ export default function SolusiEditForm({solusiId}: {solusiId: string}) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {penyakitOptions.map((map) => (
-                      <SelectGroup>
-                        <SelectItem value={map.value}>{map.value}</SelectItem>
-                      </SelectGroup>
-                    ))}
+                    <SelectGroup>
+                      {penyakitOptions.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.value}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
