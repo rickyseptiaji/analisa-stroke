@@ -34,8 +34,8 @@ export const pengetahuanColumns: ColumnDef<any>[] = [
     cell: ({ row }) => (
       <TableActions
         id={row.original.id}
-        editPath="/employee/edit"
-        deletePath="employee"
+        editPath="/pengetahuan/edit"
+        deletePath="pengetahuan"
       />
     ),
   },

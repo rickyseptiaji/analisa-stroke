@@ -3,16 +3,16 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: number }> }
+  ctx: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const { id } = await ctx.params;
   const numericId = Number(id);
+
   try {
     const query = await prisma.pasien.findUnique({
-      where: {
-        id: numericId,
-      },
+      where: { id: numericId },
     });
+
     if (!query) {
       return NextResponse.json(
         { message: "pasien tidak ditemukan" },
@@ -23,49 +23,43 @@ export async function GET(
     return NextResponse.json(query, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      {
-        message: "Internal server error",
-      },
-      {
-        status: 500,
-      }
+      { message: "Internal server error" },
+      { status: 500 }
     );
   }
 }
 
+
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  ctx: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
+  const { id } = await ctx.params;
   const numericId = Number(id);
+
   const body = await req.json();
+
   try {
     const updated = await prisma.pasien.update({
-      where: {
-        id: numericId,
-      },
+      where: { id: numericId },
       data: body,
     });
 
     return NextResponse.json(updated, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      {
-        message: "Internal server error",
-      },
-      {
-        status: 500,
-      }
+      { message: "Internal server error" },
+      { status: 500 }
     );
   }
 }
 
+
 export async function DELETE(
   req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  ctx: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
+  const { id } = await ctx.params;
   const numericId = Number(id);
 
   try {
@@ -79,6 +73,7 @@ export async function DELETE(
         { status: 404 }
       );
     }
+
     const hasilList = await prisma.hasil.findMany({
       where: { pasienId: numericId },
       select: { id: true },
