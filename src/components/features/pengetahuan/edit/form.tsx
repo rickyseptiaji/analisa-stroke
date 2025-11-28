@@ -40,8 +40,7 @@ export default function PengetahuanEditForm({
   pengetahuanId: string;
 }) {
   const [isLoading, setIsloading] = useState(false);
-  const [loadingPenyakit, setPenyakitLoading] = useState(false);
-  const [loadingGejala, setGejalaLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [penyakitOptions, setPenyakitOptions] = useState<
     { value: string; label: string }[]
   >([]);
@@ -81,11 +80,13 @@ export default function PengetahuanEditForm({
         const data = await res.json();
         form.reset({
           kd_pengetahuan: data.kd_pengetahuan,
-          kd_gejala: data.kd_pengetahuan,
+          kd_gejala: data.kd_gejala,
           kd_penyakit: data.kd_penyakit,
         });
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setInitialLoading(false);
       }
     }
     loadAll();
@@ -115,7 +116,7 @@ export default function PengetahuanEditForm({
       setIsloading(false);
     }
   }
-  if (loadingPenyakit || loadingGejala) {
+  if (initialLoading) {
     return (
       <div className="flex h-full items-center justify-center">
         <LoadingSpinner />
@@ -152,11 +153,11 @@ export default function PengetahuanEditForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {penyakitOptions.map((map) => (
-                      <SelectGroup>
+                    <SelectGroup>
+                      {penyakitOptions.map((map) => (
                         <SelectItem value={map.value}>{map.value}</SelectItem>
-                      </SelectGroup>
-                    ))}
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -176,11 +177,11 @@ export default function PengetahuanEditForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {gejalaOptions.map((map) => (
-                      <SelectGroup>
+                    <SelectGroup>
+                      {gejalaOptions.map((map) => (
                         <SelectItem value={map.value}>{map.value}</SelectItem>
-                      </SelectGroup>
-                    ))}
+                      ))}
+                    </SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
