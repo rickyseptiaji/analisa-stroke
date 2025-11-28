@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
+  output        = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nama      String?  @db.VarChar(50)
+  username  String   @unique @db.VarChar(50)
+  password  String?  @db.VarChar(255)
+  createdAt DateTime @default(now())
+}
+
+model Pasien {
+  id            Int      @id @default(autoincrement())
+  nik           String   @unique @db.VarChar(50)
+  nama_lengkap  String   @db.VarChar(50)
+  tanggal_lahir DateTime
+  umur          Int      @db.Integer()
+  jenis_kelamin String   @db.VarChar(50)
+  phone         String   @db.VarChar(50)
+  alamat        String   @db.VarChar(255)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  diagnosa      Hasil[]
+}
+
+model Gejala {
+  kd_gejala   String   @unique @db.VarChar(10)
+  nama_gejala String   @db.VarChar(50)
+  poin_gejala String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pengetahuan Pengetahuan[] @relation("GejalaToPengetahuan")
+}
+
+model Penyakit {
+  kd_penyakit   String   @unique @db.VarChar(10)
+  nama_penyakit String   @db.VarChar(50)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  pengetahuan Pengetahuan[] @relation("PenyakitToPengetahuan")
+  solusi      Solusi[]      @relation("PenyakitToSolusi")
+}
+
+model Solusi {
+  id          Int      @id @unique @default(autoincrement())
+  solusi      String   @db.Text
+  kd_penyakit String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  penyakit Penyakit @relation("PenyakitToSolusi", fields: [kd_penyakit], references: [kd_penyakit])
+}
+
+model Pengetahuan {
+  id             Int      @id @unique @default(autoincrement())
+  kd_pengetahuan String   @db.VarChar(10)
+  kd_gejala      String   @db.VarChar(10)
+  kd_penyakit    String   @db.VarChar(10)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  gejala   Gejala   @relation("GejalaToPengetahuan", fields: [kd_gejala], references: [kd_gejala])
+  penyakit Penyakit @relation("PenyakitToPengetahuan", fields: [kd_penyakit], references: [kd_penyakit])
+}
+
+model Hasil {
+  id          Int      @id @default(autoincrement())
+  pasienId    Int
+  kd_penyakit String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pasien  Pasien           @relation(fields: [pasienId], references: [id])
+  details DiagnosaDetail[]
+}
+
+model DiagnosaDetail {
+  id        Int      @id @default(autoincrement())
+  hasilId   Int
+  kd_gejala String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  diagnosa Hasil @relation(fields: [hasilId], references: [id])
+}
