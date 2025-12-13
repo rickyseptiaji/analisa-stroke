@@ -29,7 +29,6 @@ export async function GET(
   }
 }
 
-
 export async function PATCH(
   req: NextRequest,
   ctx: { params: Promise<{ id: string }> }
@@ -45,7 +44,10 @@ export async function PATCH(
       data: body,
     });
 
-    return NextResponse.json(updated, { status: 200 });
+    return NextResponse.json(
+      { message: "Berhasil Mengubah data pasien" },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
@@ -53,7 +55,6 @@ export async function PATCH(
     );
   }
 }
-
 
 export async function DELETE(
   req: NextRequest,
@@ -100,7 +101,7 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.error("DELETE ERROR:", error);
+
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

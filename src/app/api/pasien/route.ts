@@ -19,8 +19,15 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { nik, nama_lengkap, umur, alamat, jenis_kelamin, phone, tanggal_lahir } =
-      await req.json();
+    const {
+      nik,
+      nama_lengkap,
+      umur,
+      alamat,
+      jenis_kelamin,
+      phone,
+      tanggal_lahir,
+    } = await req.json();
 
     if (
       !nik ||
@@ -48,7 +55,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const pasien = await prisma.pasien.create({
+    await prisma.pasien.create({
       data: {
         nik,
         nama_lengkap,
@@ -59,7 +66,12 @@ export async function POST(req: NextRequest) {
         tanggal_lahir: new Date(tanggal_lahir),
       },
     });
-    return NextResponse.json(pasien, { status: 201 });
+    return NextResponse.json(
+      {
+        message: "Berhasil Mendaftarkan pasien",
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan pasien:", error);
     return NextResponse.json(

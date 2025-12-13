@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
     if (!username || !password) {
       return NextResponse.json(
         {
+          ok: false,
           error: "Username and password required",
         },
         { status: 400 }
@@ -22,6 +23,7 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         {
+          ok: false,
           error: "Invalid credentials",
         },
         { status: 401 }
@@ -32,15 +34,16 @@ export async function POST(req: NextRequest) {
     if (!isValid) {
       return NextResponse.json(
         {
+          ok: false,
           error: "Invalid credentials",
         },
         { status: 401 }
       );
     }
 
-    const token = signJwt({ id: user.id, email: user.username });
+    const token = signJwt({ id: user.id, username: user.username });
 
-     (await cookies()).set("token", token, {
+    (await cookies()).set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
@@ -48,11 +51,12 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({
+      ok: true,
       message: "Login Success",
     });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal server error" },
+      { ok: false, error: "Internal server error" },
       { status: 500 }
     );
   }

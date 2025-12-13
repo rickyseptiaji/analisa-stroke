@@ -17,6 +17,8 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { registerSchema } from "../../../../../lib/formSchema";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface RegisterFormProps {
   data: string;
@@ -24,7 +26,7 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ data }: RegisterFormProps) {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -39,21 +41,24 @@ export default function RegisterForm({ data }: RegisterFormProps) {
   async function onSubmit(values: z.infer<typeof registerSchema>) {
     const { nama, username, password } = values;
     try {
-     const res = await fetch("/api/auth/register", {
+      setIsLoading(true);
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ nama, username, password }),
-      })
+      });
       const data = await res.json();
-      if (res.ok) {
-        router.push("/login");
-      } else {
-        setError(data.error);
+      if (!res.ok) {
+        toast.error(data.error);
       }
+      toast.success(data.message);
+      router.push("/login");
     } catch (error) {
-      setError("Something went wrong!");
+      toast.error(error as string);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -121,8 +126,15 @@ export default function RegisterForm({ data }: RegisterFormProps) {
               )}
             />
             <div className="flex flex-col gap-3">
-              <Button type="submit" className="w-full">
-                {data}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <LoadingSpinner className="w-4 h-4" />
+                    <span>Register...</span>
+                  </div>
+                ) : (
+                  data
+                )}
               </Button>
               {/* <Button variant="outline" className="w-full">
               Login with Google

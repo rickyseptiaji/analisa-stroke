@@ -28,6 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -122,11 +123,14 @@ export default function PasienEditForm({ pasienId }: { pasienId: string }) {
           tanggal_lahir,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data pasien");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+      }
       form.reset();
-      alert("Data pasien berhasil ditambahkan!");
+      toast.success(data.message);
     } catch (error) {
-      console.log("error", error);
+      toast.error(error as string);
     } finally {
       setIsloading(false);
     }

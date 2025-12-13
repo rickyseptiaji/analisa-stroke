@@ -31,6 +31,8 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   nik: z
     .string()
@@ -52,6 +54,7 @@ const formSchema = z.object({
   }),
 });
 export default function PasienCreateForm() {
+  const router = useRouter();
   const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,11 +95,14 @@ export default function PasienCreateForm() {
           tanggal_lahir,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data pasien");
-      form.reset();
-      alert("Data pasien berhasil ditambahkan!");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+      }
+      toast.success(data.message);
+      router.push("/pasien");
     } catch (error) {
-      console.log("error", error);
+      toast.error(error as string);
     } finally {
       setIsloading(false);
     }
@@ -112,11 +118,7 @@ export default function PasienCreateForm() {
               <FormItem>
                 <FormLabel>NIK</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="NIK"
-                    maxLength={16}
-                    {...field}
-                  />
+                  <Input placeholder="NIK" maxLength={16} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

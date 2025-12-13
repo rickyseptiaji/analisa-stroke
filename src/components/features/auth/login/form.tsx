@@ -17,13 +17,15 @@ import { loginSchema } from "../../../../../lib/formSchema";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 interface LoginFormProps {
   data: string;
 }
 
 export default function LoginForm({ data }: LoginFormProps) {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -36,6 +38,7 @@ export default function LoginForm({ data }: LoginFormProps) {
   async function onSubmit(values: z.infer<typeof loginSchema>) {
     const { username, password } = values;
     try {
+      setIsLoading(true);
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -45,14 +48,17 @@ export default function LoginForm({ data }: LoginFormProps) {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        router.push("/dashboard");
-        router.refresh();
-      } else {
-        setError(data.error);
+      if (!res.ok) {
+        toast.error(data.error);
+        return;
       }
+      toast.success(data.message);
+      router.push("/dashboard");
+      router.refresh();
     } catch (error) {
-      setError("Something went wrong. Please try again.");
+      toast.error(error as string);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -107,8 +113,15 @@ export default function LoginForm({ data }: LoginFormProps) {
               )}
             />
             <div className="flex flex-col gap-3">
-              <Button type="submit" className="w-full">
-                {data}
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-2">
+                    <LoadingSpinner className="w-4 h-4" />
+                    <span>Login...</span>
+                  </div>
+                ) : (
+                  data
+                )}
               </Button>
               {/* <Button variant="outline" className="w-full">
               Login with Google
