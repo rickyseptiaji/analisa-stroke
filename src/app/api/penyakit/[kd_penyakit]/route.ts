@@ -40,14 +40,17 @@ export async function PATCH(
   const { kd_penyakit } = await params;
   const body = await req.json();
   try {
-    const updated = await prisma.penyakit.update({
+    await prisma.penyakit.update({
       where: {
         kd_penyakit: kd_penyakit,
       },
       data: body,
     });
 
-    return NextResponse.json(updated, { status: 200 });
+    return NextResponse.json(
+      { message: "Penyakit berhasil diubah" },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(
       {
@@ -89,9 +92,9 @@ export async function DELETE(
 
     await prisma.pengetahuan.deleteMany({
       where: {
-        kd_penyakit
-      }
-    })
+        kd_penyakit,
+      },
+    });
 
     await prisma.penyakit.delete({
       where: {
@@ -108,7 +111,6 @@ export async function DELETE(
       }
     );
   } catch (error) {
-    console.log("error", error);
     return NextResponse.json(
       {
         message: "Internal server error",

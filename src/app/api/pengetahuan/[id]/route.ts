@@ -18,7 +18,10 @@ export async function GET(req: Request, context: any) {
 
     return NextResponse.json(pengetahuan);
   } catch (error) {
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -32,9 +35,19 @@ export async function PATCH(req: Request, context: any) {
       data: body,
     });
 
-    return NextResponse.json(updated);
+    return NextResponse.json(
+      {
+        message: "Berhasil mengubah pengetahuan",
+      },
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -57,8 +70,16 @@ export async function DELETE(req: Request, context: any) {
       where: { id },
     });
 
-    return NextResponse.json({ message: "Data berhasil dihapus" });
+    return NextResponse.json(
+      { message: "Data berhasil dihapus" },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
   }
 }

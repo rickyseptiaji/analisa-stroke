@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 const formSchema = z.object({
   kd_pengetahuan: z.string().min(3, {
     message: "kode pengetahuan must be at leat 3 characters.",
@@ -107,9 +108,13 @@ export default function PengetahuanEditForm({
           kd_penyakit,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data pengetahuan");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+        return;
+      }
       form.reset();
-      alert("Data pengetahuan berhasil ditambahkan!");
+      toast.success(data.message);
     } catch (error) {
       console.log("error", error);
     } finally {

@@ -43,7 +43,14 @@ export async function POST(req: NextRequest) {
         poin_gejala,
       },
     });
-    return NextResponse.json(data);
+    return NextResponse.json(
+      {
+        message: "Gejala berhasil ditambahkan",
+      },
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan gejala:", error);
     return NextResponse.json(

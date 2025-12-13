@@ -10,7 +10,6 @@ export async function POST(req: NextRequest) {
     if (!username || !password) {
       return NextResponse.json(
         {
-          ok: false,
           error: "Username and password required",
         },
         { status: 400 }
@@ -23,7 +22,6 @@ export async function POST(req: NextRequest) {
     if (!user) {
       return NextResponse.json(
         {
-          ok: false,
           error: "Invalid credentials",
         },
         { status: 401 }
@@ -34,7 +32,6 @@ export async function POST(req: NextRequest) {
     if (!isValid) {
       return NextResponse.json(
         {
-          ok: false,
           error: "Invalid credentials",
         },
         { status: 401 }
@@ -50,13 +47,17 @@ export async function POST(req: NextRequest) {
       maxAge: 60 * 60 * 24 * 7,
     });
 
-    return NextResponse.json({
-      ok: true,
-      message: "Login Success",
-    });
+    return NextResponse.json(
+      {
+        message: "Login Success",
+      },
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     return NextResponse.json(
-      { ok: false, error: "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

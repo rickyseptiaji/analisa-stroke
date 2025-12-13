@@ -18,16 +18,19 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const { kd_pengetahuan, kd_penyakit, kd_gejala } = await req.json();
-    const res = await prisma.pengetahuan.create({
+    await prisma.pengetahuan.create({
       data: {
         kd_pengetahuan,
         kd_penyakit,
         kd_gejala,
       },
     });
-    return NextResponse.json(res, {
-      status: 201,
-    });
+    return NextResponse.json(
+      { message: "Berhasil menambahkan pengetahuan" },
+      {
+        status: 201,
+      }
+    );
   } catch (error) {
     return NextResponse.json({
       error: "Internal server error",

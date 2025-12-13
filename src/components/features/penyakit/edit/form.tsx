@@ -20,6 +20,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 const formSchema = z.object({
   kd_penyakit: z.string().min(3, {
@@ -77,9 +78,12 @@ export default function PenyakitEditForm({
           nama_penyakit,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+      }
       form.reset();
-      alert("Data penyakit berhasil ditambahkan!");
+      toast.success(data.message);
     } catch (error) {
       console.log("error", error);
     } finally {

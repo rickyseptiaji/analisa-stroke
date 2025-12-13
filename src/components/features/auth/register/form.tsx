@@ -52,11 +52,12 @@ export default function RegisterForm({ data }: RegisterFormProps) {
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.error);
+        return;
       }
       toast.success(data.message);
       router.push("/login");
     } catch (error) {
-      toast.error(error as string);
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

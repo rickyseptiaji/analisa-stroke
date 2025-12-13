@@ -15,7 +15,15 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
 const formSchema = z.object({
   kd_penyakit: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -47,9 +55,12 @@ export default function PenyakitCreateForm() {
           nama_penyakit,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data penyakit");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+      }
       form.reset();
-      alert("Data penyakit berhasil ditambahkan!");
+      toast.success(data.message);
     } catch (error) {
       console.log("error", error);
     } finally {
@@ -73,7 +84,7 @@ export default function PenyakitCreateForm() {
               </FormItem>
             )}
           />
-       <FormField
+          <FormField
             control={form.control}
             name="nama_penyakit"
             render={({ field }) => (

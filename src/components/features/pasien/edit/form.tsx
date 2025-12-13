@@ -126,11 +126,12 @@ export default function PasienEditForm({ pasienId }: { pasienId: string }) {
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.error);
+        return;
       }
       form.reset();
       toast.success(data.message);
     } catch (error) {
-      toast.error(error as string);
+      console.log(error)
     } finally {
       setIsloading(false);
     }

@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { MoreVertical } from "lucide-react";
+import { toast } from "sonner";
 
 type TableActionsProps = {
   id: string | number;
@@ -46,13 +47,16 @@ export const TableActions = ({
       const res = await fetch(`/api/${deletePath}/${id}`, {
         method: "DELETE",
       });
-
-      if (res.ok) {
-        router.refresh();
-        setOpen(false);
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+        return;
       }
+      router.refresh();
+      setOpen(false);
+      toast.success(data.message);
     } catch (error) {
-      console.log("Delete error:", error);
+      console.log(error);
     }
   };
 

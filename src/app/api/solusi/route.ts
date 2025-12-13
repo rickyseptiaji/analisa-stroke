@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         solusi,
       },
     });
-    return NextResponse.json(res, { status: 201 });
+    return NextResponse.json({message: "Solusi berhasil ditambahkan"}, { status: 201 });
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan penyakit:", error);
     return NextResponse.json(

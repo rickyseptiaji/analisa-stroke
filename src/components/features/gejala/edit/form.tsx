@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 const formSchema = z.object({
   kd_gejala: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -81,9 +82,13 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
           poin_gejala,
         }),
       });
-      if (!res.ok) throw new Error("Gagal menambahkan data gejala");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error);
+        return;
+      }
       form.reset();
-      alert("Data gejala berhasil diupdate!");
+      toast.success(data.message);
     } catch (error) {
       console.log("error", error);
     } finally {

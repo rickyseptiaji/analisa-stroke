@@ -56,7 +56,7 @@ export default function LoginForm({ data }: LoginFormProps) {
       router.push("/dashboard");
       router.refresh();
     } catch (error) {
-      toast.error(error as string);
+      console.log(error)
     } finally {
       setIsLoading(false);
     }

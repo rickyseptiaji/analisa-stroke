@@ -54,9 +54,14 @@ export async function PATCH(
       data: body,
     });
 
-    return NextResponse.json(updated, {
-      status: 200,
-    });
+    return NextResponse.json(
+      {
+        message: "Gejala berhasil diubah",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       {
@@ -98,9 +103,14 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json({
-      message: "Gejala Berhasil dihapus",
-    });
+    return NextResponse.json(
+      {
+        message: "Gejala Berhasil dihapus",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       {

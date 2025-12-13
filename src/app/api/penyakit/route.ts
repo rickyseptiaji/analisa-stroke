@@ -36,15 +36,17 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-    const penyakit = await prisma.penyakit.create({
+    await prisma.penyakit.create({
       data: {
         kd_penyakit,
         nama_penyakit,
       },
     });
-    return NextResponse.json(penyakit, { status: 201 });
+    return NextResponse.json(
+      { message: "Penyakit berhasil ditambahkan" },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Terjadi kesalahan saat menyimpan penyakit:", error);
     return NextResponse.json(
       { error: "Terjadi kesalahan di server." },
       { status: 500 }

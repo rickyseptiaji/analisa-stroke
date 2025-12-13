@@ -98,11 +98,12 @@ export default function PasienCreateForm() {
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.error);
+        return;
       }
       toast.success(data.message);
       router.push("/pasien");
     } catch (error) {
-      toast.error(error as string);
+      console.log(error)
     } finally {
       setIsloading(false);
     }

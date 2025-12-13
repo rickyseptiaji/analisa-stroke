@@ -5,8 +5,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const {id} = await params;
-    const numericId = Number(id);
+  const { id } = await params;
+  const numericId = Number(id);
   try {
     const solusi = await prisma.solusi.findUnique({
       where: {
@@ -36,8 +36,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const {id} = await params;
-  const numericId = Number(id)
+  const { id } = await params;
+  const numericId = Number(id);
   const body = await req.json();
   try {
     const updated = await prisma.solusi.update({
@@ -47,9 +47,12 @@ export async function PATCH(
       data: body,
     });
 
-    return NextResponse.json(updated, {
-      status: 200,
-    });
+    return NextResponse.json(
+      { message: "Solusi berhasil diubah" },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       {
@@ -66,8 +69,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const {id} = await params;
-  const numericId = Number(id)
+  const { id } = await params;
+  const numericId = Number(id);
   try {
     const solusi = await prisma.solusi.findUnique({
       where: {
@@ -91,9 +94,14 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json({
-      message: "Solusi berhasil dihapus",
-    });
+    return NextResponse.json(
+      {
+        message: "Solusi berhasil dihapus",
+      },
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     return NextResponse.json(
       {
