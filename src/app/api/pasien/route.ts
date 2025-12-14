@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
       !tanggal_lahir
     ) {
       return NextResponse.json(
-        { error: "Semua field wajib diisi!" },
+        { message: "Semua field wajib diisi!" },
         { status: 400 }
       );
     }
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
     if (existingPasien) {
       return NextResponse.json(
-        { error: "NIK sudah terdaftar!" },
+        { message: "NIK sudah terdaftar!" },
         { status: 409 }
       );
     }
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan pasien:", error);
     return NextResponse.json(
-      { error: "Terjadi kesalahan di server." },
+      { message: "Terjadi kesalahan di server." },
       { status: 500 }
     );
   }

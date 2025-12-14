@@ -11,7 +11,7 @@ export async function GET() {
     return NextResponse.json(res, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Terjadi kesalahan di server." },
+      { message: "Terjadi kesalahan di server." },
       { status: 500 }
     );
   }
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     const { kd_gejala, nama_gejala, poin_gejala } = await req.json();
     if (!kd_gejala || !nama_gejala || !poin_gejala) {
       return NextResponse.json(
-        { error: "Semua field wajib diisi!" },
+        { message: "Semua field wajib diisi!" },
         { status: 400 }
       );
     }
@@ -32,11 +32,11 @@ export async function POST(req: NextRequest) {
     });
     if (existingGejala) {
       return NextResponse.json(
-        { error: "Gejala sudah terdaftar!" },
+        { message: "Gejala sudah terdaftar!" },
         { status: 409 }
       );
     }
-    const data = await prisma.gejala.create({
+  await prisma.gejala.create({
       data: {
         kd_gejala,
         nama_gejala,
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan gejala:", error);
     return NextResponse.json(
-      { error: "Terjadi kesalahan di server." },
+      { message: "Terjadi kesalahan di server." },
       { status: 500 }
     );
   }

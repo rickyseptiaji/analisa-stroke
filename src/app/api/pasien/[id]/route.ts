@@ -39,7 +39,7 @@ export async function PATCH(
   const body = await req.json();
 
   try {
-    const updated = await prisma.pasien.update({
+    await prisma.pasien.update({
       where: { id: numericId },
       data: body,
     });
@@ -101,7 +101,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

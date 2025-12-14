@@ -80,7 +80,7 @@ export default function PenyakitEditForm({
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
       }
       form.reset();
       toast.success(data.message);

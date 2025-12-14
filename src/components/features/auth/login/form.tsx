@@ -49,14 +49,14 @@ export default function LoginForm({ data }: LoginFormProps) {
 
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       toast.success(data.message);
       router.push("/dashboard");
       router.refresh();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

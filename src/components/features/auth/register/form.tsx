@@ -51,7 +51,7 @@ export default function RegisterForm({ data }: RegisterFormProps) {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       toast.success(data.message);

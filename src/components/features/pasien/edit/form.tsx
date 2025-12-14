@@ -125,7 +125,7 @@ export default function PasienEditForm({ pasienId }: { pasienId: string }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       form.reset();

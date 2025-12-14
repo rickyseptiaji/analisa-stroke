@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     if (!kd_penyakit || !nama_penyakit) {
       return NextResponse.json(
-        { error: "Semua field wajib diisi!" },
+        { message: "Semua field wajib diisi!" },
         { status: 400 }
       );
     }
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     });
     if (existingPenyakit) {
       return NextResponse.json(
-        { error: "Kd_penyakit sudah terdaftar!" },
+        { message: "Kd_penyakit sudah terdaftar!" },
         { status: 409 }
       );
     }
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Terjadi kesalahan di server." },
+      { message: "Terjadi kesalahan di server." },
       { status: 500 }
     );
   }

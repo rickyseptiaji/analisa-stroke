@@ -45,7 +45,6 @@ export default function PengetahuanCreateForm() {
   const [gejalaOptions, setGejalaOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -69,7 +68,7 @@ export default function PengetahuanCreateForm() {
 
       setPenyakitOptions(options);
     } catch (err: any) {
-      setError(err.message);
+      console.log(err);
     } finally {
       setPenyakitLoading(false);
     }
@@ -88,7 +87,7 @@ export default function PengetahuanCreateForm() {
 
       setGejalaOptions(options);
     } catch (err: any) {
-      setError(err.message);
+      console.log(err);
     } finally {
       setGejalaLoading(false);
     }
@@ -116,7 +115,7 @@ export default function PengetahuanCreateForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       form.reset();

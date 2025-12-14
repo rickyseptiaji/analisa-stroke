@@ -47,7 +47,7 @@ export async function PATCH(
   const { kd_gejala } = await params;
   const body = await req.json();
   try {
-    const updated = await prisma.gejala.update({
+    await prisma.gejala.update({
       where: {
         kd_gejala: kd_gejala,
       },

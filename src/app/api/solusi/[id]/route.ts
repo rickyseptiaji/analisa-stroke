@@ -40,7 +40,7 @@ export async function PATCH(
   const numericId = Number(id);
   const body = await req.json();
   try {
-    const updated = await prisma.solusi.update({
+    await prisma.solusi.update({
       where: {
         id: numericId,
       },

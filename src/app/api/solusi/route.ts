@@ -7,21 +7,24 @@ export async function POST(req: NextRequest) {
 
     if (!kd_penyakit || !solusi) {
       return NextResponse.json(
-        { error: "Semua field wajib diisi!" },
+        { message: "Semua field wajib diisi!" },
         { status: 400 }
       );
     }
-    const res = await prisma.solusi.create({
+    await prisma.solusi.create({
       data: {
         kd_penyakit,
         solusi,
       },
     });
-    return NextResponse.json({message: "Solusi berhasil ditambahkan"}, { status: 201 });
+    return NextResponse.json(
+      { message: "Solusi berhasil ditambahkan" },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan penyakit:", error);
     return NextResponse.json(
-      { error: "Terjadi kesalahan di server." },
+      { message: "Terjadi kesalahan di server." },
       { status: 500 }
     );
   }

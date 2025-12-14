@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
 
     if (!nama || !username || !password) {
       return NextResponse.json(
-        { error: "Field Required!" },
+        { message: "Field Required!" },
         { status: 400 }
       );
     }
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     const existingUser = await prisma.user.findUnique({ where: { username } });
     if (existingUser) {
       return NextResponse.json(
-        { error: "User already exists!" },
+        { message: "User already exists!" },
         { status: 400 }
       );
     }
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Error creating user:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }

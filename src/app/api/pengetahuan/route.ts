@@ -9,7 +9,7 @@ export async function GET() {
     });
   } catch (error) {
     return NextResponse.json({
-      error: "internal server error",
+      message: "internal server error",
       status: 500,
     });
   }
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     );
   } catch (error) {
     return NextResponse.json({
-      error: "Internal server error",
+      message: "Internal server error",
       status: 500,
     });
   }

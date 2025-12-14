@@ -37,7 +37,6 @@ const formSchema = z.object({
 export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
   const [isLoading, setIsloading] = useState(false);
   const [initialData, setInitialData] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -84,13 +83,13 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       form.reset();
       toast.success(data.message);
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     } finally {
       setIsloading(false);
     }

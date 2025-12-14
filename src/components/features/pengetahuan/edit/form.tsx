@@ -48,7 +48,6 @@ export default function PengetahuanEditForm({
   const [gejalaOptions, setGejalaOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  const [error, setError] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -110,7 +109,7 @@ export default function PengetahuanEditForm({
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
         return;
       }
       form.reset();

@@ -57,12 +57,12 @@ export default function PenyakitCreateForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.error);
+        toast.error(data.message);
       }
       form.reset();
       toast.success(data.message);
     } catch (error) {
-      console.log("error", error);
+      console.log(error);
     } finally {
       setIsloading(false);
     }
