@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   kd_gejala: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -36,6 +37,7 @@ const formSchema = z.object({
 });
 export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter();
   const [initialData, setInitialData] = useState(true);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -88,6 +90,7 @@ export default function GejalaEditForm({ gejalaId }: { gejalaId: string }) {
       }
       form.reset();
       toast.success(data.message);
+      router.push("/gejala");
     } catch (error) {
       console.log(error);
     } finally {

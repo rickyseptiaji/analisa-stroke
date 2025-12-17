@@ -26,6 +26,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronDownIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -54,6 +55,7 @@ const formSchema = z.object({
 
 export default function PasienEditForm({ pasienId }: { pasienId: string }) {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter();
   const [dataPasien, setDataPasien] = useState(true);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -130,8 +132,9 @@ export default function PasienEditForm({ pasienId }: { pasienId: string }) {
       }
       form.reset();
       toast.success(data.message);
+      router.push("/pasien");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setIsloading(false);
     }

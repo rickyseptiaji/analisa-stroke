@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 const formSchema = z.object({
   kd_penyakit: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -33,9 +32,8 @@ const formSchema = z.object({
     message: "nama penyakit must be at least 5 characters.",
   }),
 });
-export default function PenyakitCreateForm() {
+export default function RulePenyakitCreateForm() {
   const [isLoading, setIsloading] = useState(false);
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,7 +61,6 @@ export default function PenyakitCreateForm() {
       }
       form.reset();
       toast.success(data.message);
-      router.push("/penyakit");
     } catch (error) {
       console.log(error);
     } finally {

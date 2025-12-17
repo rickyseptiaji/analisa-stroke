@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   kd_pengetahuan: z.string().min(3, {
     message: "kode pengetahuan must be at leat 3 characters.",
@@ -37,6 +38,7 @@ const formSchema = z.object({
 });
 export default function PengetahuanCreateForm() {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter();
   const [loadingPenyakit, setPenyakitLoading] = useState(false);
   const [loadingGejala, setGejalaLoading] = useState(false);
   const [penyakitOptions, setPenyakitOptions] = useState<
@@ -120,6 +122,7 @@ export default function PengetahuanCreateForm() {
       }
       form.reset();
       toast.success(data.message);
+      router.push("/pengetahuan");
     } catch (error) {
       console.log("error", error);
     } finally {

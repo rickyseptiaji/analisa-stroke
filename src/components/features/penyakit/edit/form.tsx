@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -36,6 +37,7 @@ export default function PenyakitEditForm({
   penyakitId: string;
 }) {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter();
   const [dataPenyakit, setDataPenyakit] = useState(true);
   async function fetchPenyakit() {
     setDataPenyakit(true);
@@ -84,6 +86,7 @@ export default function PenyakitEditForm({
       }
       form.reset();
       toast.success(data.message);
+      router.push("/penyakit");
     } catch (error) {
       console.log("error", error);
     } finally {

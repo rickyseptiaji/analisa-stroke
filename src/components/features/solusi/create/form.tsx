@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   kd_penyakit: z.string().min(3, {
     message: "kode penyakit must be at least 3 characters.",
@@ -36,11 +37,12 @@ const formSchema = z.object({
 });
 export default function SolusiCreateForm() {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter();
   const [penyakitOptions, setPenyakitOptions] = useState<
     { value: string; label: string }[]
   >([]);
   const [loadingPenyakit, setLoadingPenyakit] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+ 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -60,7 +62,7 @@ export default function SolusiCreateForm() {
         }));
         setPenyakitOptions(options);
       } catch (err: any) {
-        setError(err.message);
+        console.log("error", err);
       } finally {
         setLoadingPenyakit(false);
       }
@@ -89,6 +91,7 @@ export default function SolusiCreateForm() {
       }
       form.reset();
       toast.success(data.message);
+      router.push("/solusi");
     } catch (error) {
       console.log("error", error);
     } finally {

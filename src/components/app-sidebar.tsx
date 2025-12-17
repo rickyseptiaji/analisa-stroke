@@ -82,6 +82,15 @@ const data = {
       //   { title: "Tambah Pengetahuan", url: "#" },
       // ],
     },
+    // {
+    //   title: "Aturan",
+    //   url: "#",
+    //   icon: IconChartBar,
+    //   items: [
+    //     { title: "Penyakit", url: "/rule/penyakit" },
+    //     { title: "Gejala", url: "/rule/gejala" },
+    //   ],
+    // },
     {
       title: "Konsultasi",
       url: "/konsultasi",
