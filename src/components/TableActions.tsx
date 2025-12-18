@@ -25,20 +25,19 @@ type TableActionsProps = {
   id: string | number;
   editPath: string;
   deletePath?: string;
-  printPath?: string;
+  downloadPath?: string;
 };
 
 export const TableActions = ({
   id,
   editPath,
   deletePath,
-  printPath,
+  downloadPath,
 }: TableActionsProps) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const handleEdit = () => router.push(`${editPath}/${id}`);
-  const handlePrint = () => router.push(`${printPath}/${id}`);
 
   const handleDelete = async () => {
     if (!deletePath) return;
@@ -52,9 +51,9 @@ export const TableActions = ({
         toast.error(data.error);
         return;
       }
-      router.refresh();
       setOpen(false);
       toast.success(data.message);
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -71,8 +70,16 @@ export const TableActions = ({
 
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
-          {printPath && (
-            <DropdownMenuItem onClick={handlePrint}>Print</DropdownMenuItem>
+          {downloadPath && (
+            <DropdownMenuItem asChild>
+              <a
+                href={`${downloadPath}/${id}/pdf`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Download PDF
+              </a>
+            </DropdownMenuItem>
           )}
 
           <DropdownMenuSeparator />

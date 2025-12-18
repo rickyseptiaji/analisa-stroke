@@ -45,8 +45,12 @@ export async function GET(req: NextRequest) {
         };
       })
     );
-    return NextResponse.json(hasilDenganSolusi);
+    return NextResponse.json(hasilDenganSolusi, {
+      status: 200,
+    });
   } catch (error) {
-    return NextResponse.json(error);
+    return NextResponse.json(error, {
+      status: 500,
+    });
   }
 }

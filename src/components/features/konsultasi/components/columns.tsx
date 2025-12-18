@@ -63,7 +63,7 @@ export const konsultasiColumns: ColumnDef<any>[] = [
         id={row.original.id}
         editPath="/konsultasi/edit"
         deletePath="konsultasi"
-        printPath="/konsultasi/print"
+        downloadPath="/api/konsultasi"
       />
     ),
   },

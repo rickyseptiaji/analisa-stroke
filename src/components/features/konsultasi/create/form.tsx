@@ -16,6 +16,7 @@ import z from "zod";
 import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Combobox } from "@/components/comboBox";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   pasienId: z.string().min(1, "Pilih pasien terlebih dahulu"),
@@ -43,8 +44,12 @@ export default function KonsultasiCreateForm() {
 
   const fetchPasien = async () => {
     const response = await fetch("/api/pasien");
-    if (!response.ok) throw new Error("Gagal mengambil data pasien");
+
     const data = await response.json();
+    if (!response.ok) {
+      toast.error(data.message || "Gagal mengambil data pasien");
+      return;
+    }
     const options = data.map((item: any) => ({
       value: item.id.toString(),
       label: item.nama_lengkap,
@@ -54,8 +59,12 @@ export default function KonsultasiCreateForm() {
 
   const fetchGejala = async () => {
     const response = await fetch("/api/gejala");
-    if (!response.ok) throw new Error("Gagal mengambil data gejala");
+
     const data = await response.json();
+    if (!response.ok) {
+      toast.error(data.message || "Gagal mengambil data gejala");
+      return;
+    }
     setDataGejala(data);
   };
   useEffect(() => {
@@ -84,9 +93,12 @@ export default function KonsultasiCreateForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
       });
-
-      if (!res.ok) throw new Error("Gagal menyimpan data");
-      alert("Data konsultasi berhasil disimpan!");
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message || "Gagal menyimpan konsultasi");
+        return;
+      }
+      toast.success(data.message || "Konsultasi berhasil disimpan");
       form.reset();
       setShowPertanyaan(false);
     } catch (error) {
