@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Combobox } from "@/components/comboBox";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   pasienId: z.string().min(1, "Pilih pasien terlebih dahulu"),
@@ -25,6 +26,7 @@ const formSchema = z.object({
 
 export default function KonsultasiCreateForm() {
   const [isLoading, setIsloading] = useState(false);
+  const router = useRouter()
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [dataPasien, setDataPasien] = useState<
     { value: string; label: string }[]
@@ -99,8 +101,9 @@ export default function KonsultasiCreateForm() {
         return;
       }
       toast.success(data.message || "Konsultasi berhasil disimpan");
-      form.reset();
-      setShowPertanyaan(false);
+      // form.reset();
+      router.push('/konsultasi')
+      // setShowPertanyaan(false);
     } catch (error) {
       console.error(error);
     } finally {

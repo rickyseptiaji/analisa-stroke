@@ -3,26 +3,51 @@ import prisma from "../../../../lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const { pasienId, jawaban } = await req.json();
-    const pengetahuan = await prisma.pengetahuan.findMany();
-    if (!jawaban || !Array.isArray(jawaban)) {
+    const body = await req.json();
+    const { pasienId, jawaban } = body;
+
+    if (!pasienId) {
       return NextResponse.json(
-        { message: "jawaban harus berupa array" },
+        { message: "pasienId wajib diisi" },
         { status: 400 }
       );
     }
-    const normalizedJawaban = jawaban.map((g: string) =>
+
+    if (!jawaban || !Array.isArray(jawaban)) {
+      return NextResponse.json(
+        { message: "jawaban harus berupa array kd_gejala" },
+        { status: 400 }
+      );
+    }
+
+    const normalizedJawaban: string[] = jawaban.map((g: string) =>
       g.trim().toUpperCase()
     );
+
+    const pengetahuan = await prisma.pengetahuan.findMany();
+
+    if (pengetahuan.length === 0) {
+      return NextResponse.json(
+        { message: "Data pengetahuan kosong" },
+        { status: 400 }
+      );
+    }
+
     const ruleMap = new Map<string, string[]>();
+
     for (const p of pengetahuan) {
-      if (!ruleMap.has(p.kd_penyakit)) {
-        ruleMap.set(p.kd_penyakit, []);
+      const kdPenyakit = p.kd_penyakit.trim().toUpperCase();
+      const kdGejala = p.kd_gejala.trim().toUpperCase();
+
+      if (!ruleMap.has(kdPenyakit)) {
+        ruleMap.set(kdPenyakit, []);
       }
-      ruleMap.get(p.kd_penyakit)!.push(p.kd_gejala);
+
+      ruleMap.get(kdPenyakit)!.push(kdGejala);
     }
 
     let hasil: string | null = null;
+
     for (const [kd_penyakit, gejalaList] of ruleMap.entries()) {
       const terpenuhi = gejalaList.every((g) => normalizedJawaban.includes(g));
 
@@ -31,12 +56,14 @@ export async function POST(req: NextRequest) {
         break;
       }
     }
+
     if (!hasil) {
       return NextResponse.json(
         { message: "Tidak ada aturan yang terpenuhi" },
         { status: 400 }
       );
     }
+
     const diagnosa = await prisma.hasil.create({
       data: {
         pasienId: Number(pasienId),
@@ -44,7 +71,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const detailData = jawaban.map((kd_gejala) => ({
+    const detailData = normalizedJawaban.map((kd_gejala) => ({
       hasilId: diagnosa.id,
       kd_gejala,
     }));
@@ -52,16 +79,24 @@ export async function POST(req: NextRequest) {
     await prisma.diagnosaDetail.createMany({
       data: detailData,
     });
+
     return NextResponse.json(
-      { message: "Data diterima", hasil: diagnosa, detail: detailData },
+      {
+        message: "Diagnosa berhasil",
+        kd_penyakit: hasil,
+        hasil: diagnosa,
+        detail: detailData,
+      },
       { status: 200 }
     );
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
-      { message: "internal server error", error: String(error) },
       {
-        status: 500,
-      }
+        message: "Internal server error",
+        error: String(error),
+      },
+      { status: 500 }
     );
   }
 }
