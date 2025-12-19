@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const id = params.id;
 
-  const res = await fetch(`http://localhost:3000/api/diagnosadetail?id=${id}`, {
+  const res = await fetch(new URL(`/api/diagnosadetail?id=${id}`, req.url), {
     cache: "no-store",
   });
 
