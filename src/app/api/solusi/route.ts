@@ -3,7 +3,9 @@ import prisma from "../../../../lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
-    const { kd_penyakit, solusi } = await req.json();
+    const body = await req.json();
+    const kd_penyakit = body.kd_penyakit.trim().toUpperCase();
+    const solusi = body.solusi.trim();
 
     if (!kd_penyakit || !solusi) {
       return NextResponse.json(

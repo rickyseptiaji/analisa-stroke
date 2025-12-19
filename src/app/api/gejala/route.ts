@@ -19,7 +19,10 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { kd_gejala, nama_gejala, poin_gejala } = await req.json();
+    const body = await req.json();
+    const kd_gejala = body.kd_gejala.toUpperCase();
+    const nama_gejala = body.nama_gejala.trim();
+    const poin_gejala = body.poin_gejala.trim();
     if (!kd_gejala || !nama_gejala || !poin_gejala) {
       return NextResponse.json(
         { message: "Semua field wajib diisi!" },
@@ -36,7 +39,7 @@ export async function POST(req: NextRequest) {
         { status: 409 }
       );
     }
-  await prisma.gejala.create({
+    await prisma.gejala.create({
       data: {
         kd_gejala,
         nama_gejala,

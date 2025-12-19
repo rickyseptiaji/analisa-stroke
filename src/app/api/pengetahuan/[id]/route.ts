@@ -28,11 +28,18 @@ export async function GET(req: Request, context: any) {
 export async function PATCH(req: Request, context: any) {
   const id = Number(context.params.id);
   const body = await req.json();
+  const kd_pengetahuan = body.kd_pengetahuan.toUpperCase();
+  const kd_penyakit = body.kd_penyakit.trim();
+  const kd_gejala = body.kd_gejala.trim();
 
   try {
-    const updated = await prisma.pengetahuan.update({
+    await prisma.pengetahuan.update({
       where: { id },
-      data: body,
+      data: {
+        kd_pengetahuan,
+        kd_penyakit,
+        kd_gejala,
+      },
     });
 
     return NextResponse.json(

@@ -44,14 +44,17 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ kd_gejala: string }> }
 ) {
-  const { kd_gejala } = await params;
+
   const body = await req.json();
+  const kd_gejala = body.kd_gejala.toUpperCase();
   try {
     await prisma.gejala.update({
       where: {
         kd_gejala: kd_gejala,
       },
-      data: body,
+      data: {
+        kd_gejala: kd_gejala,
+      },
     });
 
     return NextResponse.json(

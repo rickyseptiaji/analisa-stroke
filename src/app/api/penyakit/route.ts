@@ -19,8 +19,9 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { kd_penyakit, nama_penyakit } = await req.json();
-
+    const body = await req.json();
+    const kd_penyakit = body.kd_penyakit.trim().toUpperCase();
+    const nama_penyakit = body.nama_penyakit.trim();
     if (!kd_penyakit || !nama_penyakit) {
       return NextResponse.json(
         { message: "Semua field wajib diisi!" },

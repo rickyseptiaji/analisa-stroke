@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!jawaban || !Array.isArray(jawaban)) {
+    if (!Array.isArray(jawaban) || jawaban.length === 0) {
       return NextResponse.json(
         { message: "jawaban harus berupa array kd_gejala" },
         { status: 400 }
       );
     }
 
-    const normalizedJawaban: string[] = jawaban.map((g: string) =>
+    const normalizedJawaban = jawaban.map((g: string) =>
       g.trim().toUpperCase()
     );
 
@@ -33,33 +33,52 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ruleMap = new Map<string, string[]>();
+    const penyakitMap = new Map<string, { total: number; cocok: number }>();
 
     for (const p of pengetahuan) {
       const kdPenyakit = p.kd_penyakit.trim().toUpperCase();
       const kdGejala = p.kd_gejala.trim().toUpperCase();
 
-      if (!ruleMap.has(kdPenyakit)) {
-        ruleMap.set(kdPenyakit, []);
+      if (!penyakitMap.has(kdPenyakit)) {
+        penyakitMap.set(kdPenyakit, {
+          total: 0,
+          cocok: 0,
+        });
       }
 
-      ruleMap.get(kdPenyakit)!.push(kdGejala);
+      penyakitMap.get(kdPenyakit)!.total += 1;
+
+      if (normalizedJawaban.includes(kdGejala)) {
+        penyakitMap.get(kdPenyakit)!.cocok += 1;
+      }
     }
 
+    const priority: Record<string, number> = {
+      H03: 3,
+      H02: 2,
+      H01: 1,
+    };
+
     let hasil: string | null = null;
+    let skorTerbaik = 0;
 
-    for (const [kd_penyakit, gejalaList] of ruleMap.entries()) {
-      const terpenuhi = gejalaList.every((g) => normalizedJawaban.includes(g));
+    for (const [kd, data] of penyakitMap.entries()) {
+      if (data.cocok === 0) continue;
 
-      if (terpenuhi) {
-        hasil = kd_penyakit;
-        break;
+      const skor = data.cocok / data.total;
+
+      if (
+        skor > skorTerbaik ||
+        (skor === skorTerbaik && priority[kd] > priority[hasil ?? ""])
+      ) {
+        skorTerbaik = skor;
+        hasil = kd;
       }
     }
 
     if (!hasil) {
       return NextResponse.json(
-        { message: "Tidak ada aturan yang terpenuhi" },
+        { message: "Tidak ada diagnosa yang cocok" },
         { status: 400 }
       );
     }
@@ -71,7 +90,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const detailData = normalizedJawaban.map((kd_gejala) => ({
+    const detailData = normalizedJawaban.map((kd_gejala: string) => ({
       hasilId: diagnosa.id,
       kd_gejala,
     }));
@@ -83,9 +102,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         message: "Diagnosa berhasil",
-        kd_penyakit: hasil,
-        hasil: diagnosa,
-        detail: detailData,
       },
       { status: 200 }
     );

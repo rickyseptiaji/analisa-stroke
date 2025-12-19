@@ -39,12 +39,18 @@ export async function PATCH(
   const { id } = await params;
   const numericId = Number(id);
   const body = await req.json();
+  const kd_penyakit = body.kd_penyakit.trim().toUpperCase();
+  const solusi = body.solusi.trim();
+
   try {
     await prisma.solusi.update({
       where: {
         id: numericId,
       },
-      data: body,
+      data: {
+        kd_penyakit,
+        solusi,
+      },
     });
 
     return NextResponse.json(

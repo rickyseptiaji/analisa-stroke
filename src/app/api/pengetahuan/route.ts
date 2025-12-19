@@ -17,7 +17,10 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
-    const { kd_pengetahuan, kd_penyakit, kd_gejala } = await req.json();
+    const body = await req.json();
+    const kd_pengetahuan = body.kd_pengetahuan.toUpperCase();
+    const kd_penyakit = body.kd_penyakit.trim();
+    const kd_gejala = body.kd_gejala.trim();
     await prisma.pengetahuan.create({
       data: {
         kd_pengetahuan,

@@ -37,8 +37,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ kd_penyakit: string }> }
 ) {
-  const { kd_penyakit } = await params;
   const body = await req.json();
+  const kd_penyakit = body.kd_penyakit.trim().toUpperCase();
   try {
     await prisma.penyakit.update({
       where: {
