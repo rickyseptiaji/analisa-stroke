@@ -65,3 +65,54 @@ export async function PATCH(
   );
 }
 
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const numericId = Number(params.id);
+
+  if (isNaN(numericId)) {
+    return NextResponse.json({ message: "ID tidak valid" }, { status: 400 });
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const hasil = await tx.hasil.findUnique({
+        where: { id: numericId },
+      });
+
+      if (!hasil) {
+        throw new Error("NOT_FOUND");
+      }
+      await tx.diagnosaDetail.deleteMany({
+        where: {
+          hasilId: numericId,
+        },
+      });
+
+      await tx.hasil.delete({
+        where: {
+          id: numericId,
+        },
+      });
+    });
+
+    return NextResponse.json(
+      { message: "Data berhasil dihapus" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    if (error.message === "NOT_FOUND") {
+      return NextResponse.json(
+        { message: "Data tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}

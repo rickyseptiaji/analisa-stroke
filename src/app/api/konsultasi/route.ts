@@ -3,7 +3,6 @@ import prisma from "../../../../lib/prisma";
 import { hitungDiagnosa } from "@/lib/hitungDiagnosa";
 import { simpanDiagnosa } from "@/lib/simpanDiagnosa";
 
-
 export async function POST(req: NextRequest) {
   const { pasienId, jawaban } = await req.json();
 
@@ -23,10 +22,7 @@ export async function POST(req: NextRequest) {
     jawaban: hasilHitung.jawaban,
   });
 
-  return NextResponse.json(
-    { message: "Diagnosa berhasil" },
-    { status: 200 }
-  );
+  return NextResponse.json({ message: "Diagnosa berhasil" }, { status: 200 });
 }
 
 export async function GET() {
@@ -41,3 +37,5 @@ export async function GET() {
     return NextResponse.json(error);
   }
 }
+
+
