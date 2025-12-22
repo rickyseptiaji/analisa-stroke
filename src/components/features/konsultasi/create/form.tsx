@@ -18,11 +18,9 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Combobox } from "@/components/comboBox";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { konsultasiSchema } from "../../../../../lib/formSchema";
 
-const formSchema = z.object({
-  pasienId: z.string().min(1, "Pilih pasien terlebih dahulu"),
-  jawaban: z.array(z.string()).optional(),
-});
+
 
 export default function KonsultasiCreateForm() {
   const [isLoading, setIsloading] = useState(false);
@@ -36,8 +34,8 @@ export default function KonsultasiCreateForm() {
   >([]);
   const [showPertanyaan, setShowPertanyaan] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof konsultasiSchema>>({
+    resolver: zodResolver(konsultasiSchema),
     defaultValues: {
       pasienId: "",
       jawaban: [],
@@ -87,7 +85,7 @@ export default function KonsultasiCreateForm() {
     setShowPertanyaan(!!form.watch("pasienId"));
   }, [form.watch("pasienId")]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof konsultasiSchema>) {
     try {
       setIsloading(true);
       const res = await fetch("/api/konsultasi", {

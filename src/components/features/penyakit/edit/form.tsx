@@ -23,14 +23,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-const formSchema = z.object({
-  kd_penyakit: z.string().min(3, {
-    message: "kode penyakit must be at least 3 characters.",
-  }),
-  nama_penyakit: z.string().min(5, {
-    message: "nama penyakit must be at least 5 characters.",
-  }),
-});
+import { penyakitSchema } from "../../../../../lib/formSchema";
+
 export default function PenyakitEditForm({
   penyakitId,
 }: {
@@ -59,14 +53,14 @@ export default function PenyakitEditForm({
     fetchPenyakit();
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof penyakitSchema>>({
+    resolver: zodResolver(penyakitSchema),
     defaultValues: {
       kd_penyakit: "",
       nama_penyakit: "",
     },
   });
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof penyakitSchema>) {
     const { kd_penyakit, nama_penyakit } = values;
     try {
       setIsloading(true);

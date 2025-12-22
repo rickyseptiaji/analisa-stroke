@@ -27,14 +27,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-const formSchema = z.object({
-  kd_penyakit: z.string().min(3, {
-    message: "kode penyakit must be at least 3 characters.",
-  }),
-  solusi: z.string().min(5, {
-    message: "solusi must be at least 5 characters.",
-  }),
-});
+import { solusiSchema } from "../../../../../lib/formSchema";
+
 export default function SolusiCreateForm() {
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
@@ -43,8 +37,8 @@ export default function SolusiCreateForm() {
   >([]);
   const [loadingPenyakit, setLoadingPenyakit] = useState(true);
  
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof solusiSchema>>({
+    resolver: zodResolver(solusiSchema),
     defaultValues: {
       kd_penyakit: "",
       solusi: "",
@@ -70,7 +64,7 @@ export default function SolusiCreateForm() {
 
     fetchPenyakit();
   }, []);
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof solusiSchema>) {
     const { kd_penyakit, solusi } = values;
     try {
       setIsloading(true);

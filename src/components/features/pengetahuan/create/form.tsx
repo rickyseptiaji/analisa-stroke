@@ -25,17 +25,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-const formSchema = z.object({
-  kd_pengetahuan: z.string().min(3, {
-    message: "kode pengetahuan must be at leat 3 characters.",
-  }),
-  kd_gejala: z.string().min(3, {
-    message: "kode gejala must be at least 3 characters.",
-  }),
-  kd_penyakit: z.string().min(3, {
-    message: "kode penyakit must be at least 3 characters.",
-  }),
-});
+import { pengetahuanSchema } from "../../../../../lib/formSchema";
+
 export default function PengetahuanCreateForm() {
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
@@ -47,8 +38,8 @@ export default function PengetahuanCreateForm() {
   const [gejalaOptions, setGejalaOptions] = useState<
     { value: string; label: string }[]
   >([]);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof pengetahuanSchema>>({
+    resolver: zodResolver(pengetahuanSchema),
     defaultValues: {
       kd_pengetahuan: "",
       kd_gejala: "",
@@ -100,7 +91,7 @@ export default function PengetahuanCreateForm() {
     fetchKdGejala();
   }, []);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof pengetahuanSchema>) {
     const { kd_pengetahuan, kd_gejala, kd_penyakit } = values;
     try {
       setIsloading(true);

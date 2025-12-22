@@ -31,34 +31,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { pasienSchema } from "../../../../../lib/formSchema";
 
-const formSchema = z.object({
-  nik: z
-    .string()
-    .regex(/^\d+$/, { message: "NIK hanya boleh berisi angka." })
-    .length(16, { message: "NIK harus terdiri dari 16 digit." }),
-  nama_lengkap: z.string().min(2, {
-    message: "Nama must be at least 2 characters.",
-  }),
-  umur: z.coerce.number().min(1, { message: "Umur must be at least 1 digit." }),
-  alamat: z.string().min(5, {
-    message: "Alamat must be at least 5 characters.",
-  }),
-  jenis_kelamin: z.string(),
-  phone: z.string().min(10, {
-    message: "Phone must be at least 10 characters.",
-  }),
-  tanggal_lahir: z.date({
-    errorMap: () => ({ message: "Tanggal Lahir is required." }),
-  }),
-});
 
 export default function PasienEditForm({ pasienId }: { pasienId: string }) {
   const [isLoading, setIsloading] = useState(false);
   const router = useRouter();
   const [dataPasien, setDataPasien] = useState(true);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof pasienSchema>>({
+    resolver: zodResolver(pasienSchema),
     defaultValues: {
       nik: "",
       nama_lengkap: "",
@@ -98,7 +79,7 @@ export default function PasienEditForm({ pasienId }: { pasienId: string }) {
     fetchPasien();
   }, []);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof pasienSchema>) {
     const {
       nik,
       nama_lengkap,
