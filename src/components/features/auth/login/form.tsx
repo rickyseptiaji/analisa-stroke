@@ -19,6 +19,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import useAuthStore from "@/store/auth.store";
+
 interface LoginFormProps {
   data: string;
 }
@@ -52,9 +54,9 @@ export default function LoginForm({ data }: LoginFormProps) {
         toast.error(data.message);
         return;
       }
+      useAuthStore.getState().login(data.user, data.token);
       toast.success(data.message);
       router.push("/dashboard");
-      router.refresh();
     } catch (error) {
       console.log(error);
     } finally {

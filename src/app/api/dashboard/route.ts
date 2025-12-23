@@ -24,7 +24,6 @@ export async function GET(req: Request) {
     },
   })
 
-  // GROUP MANUAL PER HARI
   const map = new Map<string, number>()
 
   rows.forEach(row => {

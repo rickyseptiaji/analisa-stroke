@@ -26,5 +26,8 @@ export const config = {
     "/",
     "/pasien",
     "/penyakit",
+    "/gejala",
+    "/pengetahuan",
+    "/konsultasi"
   ],
 };
