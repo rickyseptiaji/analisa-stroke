@@ -56,7 +56,7 @@ export async function GET(
         pasien.nama_lengkap
       }</td></tr>
       <tr><td class="font-semibold">NIK</td><td>: ${pasien.nik}</td></tr>
-      <tr><td class="font-semibold">Alamat</td><td>: ${pasien.alamat}</td></tr>
+
             <tr><td class="font-semibold">Tanggal Lahir</td><td>: ${formatTanggal(
               pasien.tanggal_lahir
             )}</td></tr>
@@ -64,6 +64,9 @@ export async function GET(
       <tr><td class="font-semibold">Jenis Kelamin</td><td>: ${
         pasien.jenis_kelamin
       }</td></tr>
+            <tr><td class="font-semibold">Alamat</td><td>: ${
+              pasien.alamat
+            }</td></tr>
       <tr><td class="font-semibold">Telepon</td><td>: ${pasien.phone}</td></tr>
       <tr>
         <td class="font-semibold">Penyakit</td>
