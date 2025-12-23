@@ -22,6 +22,15 @@ export async function GET(
   const semuaSolusi: string[] = Array.from(
     new Set(data.flatMap((d) => d.solusi.map((s: any) => String(s.solusi))))
   );
+  function formatTanggal(tanggal: string) {
+    if (!tanggal) return "-";
+
+    return new Date(tanggal).toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  }
 
   const html = `
 <!DOCTYPE html>
@@ -48,6 +57,10 @@ export async function GET(
       }</td></tr>
       <tr><td class="font-semibold">NIK</td><td>: ${pasien.nik}</td></tr>
       <tr><td class="font-semibold">Alamat</td><td>: ${pasien.alamat}</td></tr>
+            <tr><td class="font-semibold">Tanggal Lahir</td><td>: ${formatTanggal(
+              pasien.tanggal_lahir
+            )}</td></tr>
+      <tr><td class="font-semibold">Umur</td><td>: ${pasien.umur}</td></tr>
       <tr><td class="font-semibold">Jenis Kelamin</td><td>: ${
         pasien.jenis_kelamin
       }</td></tr>
