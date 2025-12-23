@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import puppeteer from "puppeteer";
+import prisma from "../../../../../../lib/prisma";
+function capitalizeWords(text: string) {
+  return text.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
+}
 
 export async function GET(
   req: Request,
@@ -18,7 +22,10 @@ export async function GET(
   }
 
   const pasien = data[0].diagnosa.pasien;
-
+  const kdPenyakit = data[0].diagnosa.kd_penyakit;
+  const penyakit = await prisma.penyakit.findUnique({
+    where: { kd_penyakit: kdPenyakit },
+  });
   const semuaSolusi: string[] = Array.from(
     new Set(data.flatMap((d) => d.solusi.map((s: any) => String(s.solusi))))
   );
@@ -70,7 +77,9 @@ export async function GET(
       <tr><td class="font-semibold">Telepon</td><td>: ${pasien.phone}</td></tr>
       <tr>
         <td class="font-semibold">Penyakit</td>
-        <td>: ${data[0].solusi[0].penyakit.kd_penyakit}</td>
+<td>: ${capitalizeWords(penyakit?.nama_penyakit ?? "-")} (${
+    penyakit?.kd_penyakit ?? "-"
+  })</td>
       </tr>
     </table>
 
@@ -79,7 +88,7 @@ export async function GET(
     <h2 class="text-xl font-semibold mb-3">Hasil Diagnosa</h2>
     <p class="text-sm">
       <span class="font-semibold">Diagnosa Penyakit:</span>
-      ${data[0].solusi[0].penyakit.nama_penyakit}
+      ${capitalizeWords(penyakit?.nama_penyakit ?? "-")}
     </p>
 
     <p class="font-semibold mt-2">Solusi:</p>
@@ -105,7 +114,9 @@ export async function GET(
           <tr>
             <td class="border p-2 text-center">${g.gejala.kd_gejala}</td>
             <td class="border p-2">${g.gejala.nama_gejala}</td>
-            <td class="border p-2 text-center">${g.gejala.poin_gejala}</td>
+            <td class="border p-2 text-center">${capitalizeWords(
+              g.gejala.poin_gejala
+            )}</td>
           </tr>
         `
           )

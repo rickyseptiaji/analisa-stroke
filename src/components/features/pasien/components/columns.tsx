@@ -26,6 +26,18 @@ export const visitorColumns: ColumnDef<any>[] = [
   {
     accessorKey: "tanggal_lahir",
     header: "Tanggal Lahir",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      if (!value) return "-";
+
+      const date = new Date(value);
+      return date.toLocaleDateString("id-ID");
+    },
+  },
+
+  {
+    accessorKey: "umur",
+    header: "Umur",
   },
   {
     accessorKey: "jenis_kelamin",
