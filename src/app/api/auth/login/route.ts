@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
           username: user.username,
           nama: user.nama,
         },
-        token,
         message: "Login successful",
       },
       {

@@ -54,7 +54,7 @@ export default function LoginForm({ data }: LoginFormProps) {
         toast.error(data.message);
         return;
       }
-      useAuthStore.getState().login(data.user, data.token);
+      useAuthStore.getState().login(data.user);
       toast.success(data.message);
       router.push("/dashboard");
     } catch (error) {

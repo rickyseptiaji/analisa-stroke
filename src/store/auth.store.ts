@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface User {
   id: number;
@@ -9,9 +9,8 @@ interface User {
 
 interface AuthStore {
   user: User | null;
-  token: string | null;
   isLoggedIn: boolean;
-  login: (userData: User, token: string) => void;
+  login: (userData: User) => void;
   logout: () => void;
 }
 
@@ -19,14 +18,12 @@ const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       user: null,
-      token: null,
       isLoggedIn: false,
-      login: (userData, token) =>
-        set({ user: userData, token, isLoggedIn: true }),
-      logout: () => set({ user: null, token: null, isLoggedIn: false }),
+      login: (userData) => set({ user: userData, isLoggedIn: true }),
+      logout: () => set({ user: null, isLoggedIn: false }),
     }),
     {
-      name: 'auth-storage', 
+      name: "auth-storage",
     }
   )
 );
