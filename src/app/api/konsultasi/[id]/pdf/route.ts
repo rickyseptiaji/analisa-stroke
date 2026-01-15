@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import puppeteer from "puppeteer";
 import prisma from "../../../../../../lib/prisma";
 function capitalizeWords(text: string) {
@@ -6,10 +6,10 @@ function capitalizeWords(text: string) {
 }
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = params.id;
+  const id = await params;
 
   const res = await fetch(new URL(`/api/diagnosadetail?id=${id}`, req.url), {
     cache: "no-store",

@@ -5,10 +5,11 @@ import { simpanDiagnosa } from "@/lib/simpanDiagnosa";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const numericId = Number(params.id);
+    const { id } = await params;
+    const numericId = Number(id);
 
     const hasil = await prisma.hasil.findUnique({
       where: {
@@ -37,10 +38,11 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
+  const hasilId = Number(id);
   const { pasienId, jawaban } = await req.json();
-  const hasilId = Number(params.id);
 
   const pengetahuan = await prisma.pengetahuan.findMany();
   const hasilHitung = hitungDiagnosa(jawaban, pengetahuan);
@@ -67,9 +69,10 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const numericId = Number(params.id);
+  const {id} = await params;
+  const numericId = Number(id);
 
   if (isNaN(numericId)) {
     return NextResponse.json({ message: "ID tidak valid" }, { status: 400 });
