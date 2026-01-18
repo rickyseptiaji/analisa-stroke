@@ -75,7 +75,7 @@ export function NavUser({ user }: { user: any }) {
               <Image
                 src="/assets/image/puskesmas-seeklogo.png"
                 alt="Logo"
-                width={25}
+                width={20}
                 height={10}
               />
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -114,13 +114,13 @@ export function NavUser({ user }: { user: any }) {
 
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem onClick={() => setTheme("light")}>
-                    ☀️ Light
+                    Light
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    🌙 Dark
+                    Dark
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setTheme("system")}>
-                    💻 System
+                    System
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
