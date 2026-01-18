@@ -33,7 +33,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import useAuthStore from "@/store/auth.store";
-
+import Image from "next/image";
 
 const data = {
   navMain: [
@@ -151,7 +151,7 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const {user} = useAuthStore();
+  const { user } = useAuthStore();
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -163,7 +163,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
+                {/* <IconInnerShadowTop className="!size-5" /> */}
+                <Image
+                  src="/assets/image/puskesmas-seeklogo.png"
+                  alt="Logo"
+                  width={25}
+                  height={50}
+                />
                 <span className="text-base font-semibold">Puskesmas</span>
               </a>
             </SidebarMenuButton>

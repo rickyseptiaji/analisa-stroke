@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import useAuthStore from "@/store/auth.store";
+import Image from "next/image";
 
 interface LoginFormProps {
   data: string;

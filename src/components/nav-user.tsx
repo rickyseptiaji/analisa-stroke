@@ -29,6 +29,7 @@ import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/auth.store";
 import { Button } from "./ui/button";
 import { Moon, Sun } from "lucide-react";
+import Image from "next/image";
 
 export function NavUser({ user }: { user: any }) {
   const { isMobile } = useSidebar();
@@ -48,10 +49,12 @@ export function NavUser({ user }: { user: any }) {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg grayscale">
-                {/* <AvatarImage src={user.avatar} alt={user.username} /> */}
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
+              <Image
+                src="/assets/image/puskesmas-seeklogo.png"
+                alt="Logo"
+                width={25}
+                height={10}
+              />
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user?.nama}</span>
                 <span className="text-muted-foreground truncate text-xs">
@@ -69,10 +72,12 @@ export function NavUser({ user }: { user: any }) {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  {/* <AvatarImage src={user.avatar} alt={user.name} /> */}
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
+              <Image
+                src="/assets/image/puskesmas-seeklogo.png"
+                alt="Logo"
+                width={25}
+                height={10}
+              />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">{user?.nama}</span>
                   <span className="text-muted-foreground truncate text-xs">
