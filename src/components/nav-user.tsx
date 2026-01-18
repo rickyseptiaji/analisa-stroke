@@ -24,13 +24,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/auth.store";
+import { Button } from "./ui/button";
+import { Moon, Sun } from "lucide-react";
 
 export function NavUser({ user }: { user: any }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { setTheme } = useTheme();
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     useAuthStore.getState().logout();
@@ -80,7 +83,7 @@ export function NavUser({ user }: { user: any }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
@@ -91,7 +94,31 @@ export function NavUser({ user }: { user: any }) {
               <DropdownMenuItem>
                 <IconNotification />
                 Notifications
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <DropdownMenuItem className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Sun className="h-4 w-4 dark:hidden" />
+                      <Moon className="h-4 w-4 hidden dark:block" />
+                      <span>Theme</span>
+                    </div>
+                    <IconDotsVertical className="h-4 w-4 text-muted-foreground" />
+                  </DropdownMenuItem>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    ☀️ Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    🌙 Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    💻 System
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem
