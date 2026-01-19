@@ -5,11 +5,14 @@ export const pengetahuanColumns: ColumnDef<any>[] = [
   {
     id: "no",
     header: "No",
-    cell: ({ row, table }) =>
-      table.getState().pagination.pageIndex *
-        table.getState().pagination.pageSize +
-      row.index +
-      1,
+    cell: ({ row, table }) => {
+      const { pageIndex, pageSize } = table.getState().pagination;
+
+      const pageRows = table.getPaginationRowModel().rows;
+      const indexInPage = pageRows.findIndex((r) => r.id === row.id);
+
+      return pageIndex * pageSize + indexInPage + 1;
+    },
   },
   // {
   //   accessorKey: "id",
@@ -23,7 +26,7 @@ export const pengetahuanColumns: ColumnDef<any>[] = [
     accessorKey: "kd_penyakit",
     header: "Kode Penyakit",
   },
-    {
+  {
     accessorKey: "kd_gejala",
     header: "Kode Gejala",
   },
