@@ -76,7 +76,7 @@ export async function GET(
       <tr><td class="font-semibold">Telepon</td><td>: ${pasien.phone}</td></tr>
       <tr>
         <td class="font-semibold">Penyakit</td>
-<td>: ${capitalizeWords(penyakit?.nama_penyakit ?? "-")} (${
+<td>: Stroke ${capitalizeWords(penyakit?.nama_penyakit ?? "-")} (${
     penyakit?.kd_penyakit ?? "-"
   })</td>
       </tr>

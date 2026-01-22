@@ -3,7 +3,7 @@ import prisma from "../../../../../lib/prisma";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ kd_gejala: string }> }
+  { params }: { params: Promise<{ kd_gejala: string }> },
 ) {
   const { kd_gejala } = await params;
 
@@ -21,7 +21,7 @@ export async function GET(
         },
         {
           status: 404,
-        }
+        },
       );
     }
 
@@ -35,35 +35,46 @@ export async function GET(
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ kd_gejala: string }> }
+  { params }: { params: Promise<{ kd_gejala: string }> },
 ) {
-
-  const body = await req.json();
-  const kd_gejala = body.kd_gejala.toUpperCase();
+  const { kd_gejala } = await params;
+  const { nama_gejala } = await req.json();
   try {
+    const gejala = await prisma.gejala.findUnique({
+      where: {
+        kd_gejala: kd_gejala,
+      },
+    });
+    if (!gejala) {
+      return NextResponse.json(
+        {
+          message: "Gejala tidak ditemukan",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
     await prisma.gejala.update({
       where: {
         kd_gejala: kd_gejala,
       },
       data: {
-        kd_gejala: kd_gejala,
+        nama_gejala: nama_gejala,
       },
     });
-
     return NextResponse.json(
-      {
-        message: "Gejala berhasil diubah",
-      },
+      { message: "Berhasil perbarui" },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     return NextResponse.json(
@@ -72,14 +83,14 @@ export async function PATCH(
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ kd_gejala: string }> }
+  { params }: { params: Promise<{ kd_gejala: string }> },
 ) {
   const { kd_gejala } = await params;
   try {
@@ -96,7 +107,7 @@ export async function DELETE(
         },
         {
           status: 200,
-        }
+        },
       );
     }
 
@@ -112,7 +123,7 @@ export async function DELETE(
       },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     return NextResponse.json(
@@ -121,7 +132,7 @@ export async function DELETE(
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
