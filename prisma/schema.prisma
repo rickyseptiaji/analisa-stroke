@@ -31,7 +31,7 @@ model Pasien {
   umur          Int      @db.Integer()
   jenis_kelamin String   @db.VarChar(50)
   phone         String   @db.VarChar(50)
-  alamat        String   @db.VarChar(255)
+  alamat        String   @db.Text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   diagnosa      Hasil[]
@@ -39,7 +39,7 @@ model Pasien {
 
 model Gejala {
   kd_gejala   String   @unique @db.VarChar(10)
-  nama_gejala String   @db.VarChar(255)
+  nama_gejala String   @db.Text
   poin_gejala String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

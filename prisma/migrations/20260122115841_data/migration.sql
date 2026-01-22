@@ -18,7 +18,7 @@ CREATE TABLE "public"."Pasien" (
     "umur" INTEGER NOT NULL,
     "jenis_kelamin" VARCHAR(50) NOT NULL,
     "phone" VARCHAR(50) NOT NULL,
-    "alamat" VARCHAR(255) NOT NULL,
+    "alamat" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -28,7 +28,7 @@ CREATE TABLE "public"."Pasien" (
 -- CreateTable
 CREATE TABLE "public"."Gejala" (
     "kd_gejala" VARCHAR(10) NOT NULL,
-    "nama_gejala" VARCHAR(50) NOT NULL,
+    "nama_gejala" TEXT NOT NULL,
     "poin_gejala" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL
@@ -72,8 +72,6 @@ CREATE TABLE "public"."Hasil" (
     "kd_penyakit" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "tingkat_penyakit" TEXT NOT NULL,
-    "tingkat_gejala" TEXT NOT NULL,
 
     CONSTRAINT "Hasil_pkey" PRIMARY KEY ("id")
 );
@@ -81,7 +79,7 @@ CREATE TABLE "public"."Hasil" (
 -- CreateTable
 CREATE TABLE "public"."DiagnosaDetail" (
     "id" SERIAL NOT NULL,
-    "diagnosaId" INTEGER NOT NULL,
+    "hasilId" INTEGER NOT NULL,
     "kd_gejala" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -120,4 +118,4 @@ ALTER TABLE "public"."Pengetahuan" ADD CONSTRAINT "Pengetahuan_kd_penyakit_fkey"
 ALTER TABLE "public"."Hasil" ADD CONSTRAINT "Hasil_pasienId_fkey" FOREIGN KEY ("pasienId") REFERENCES "public"."Pasien"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."DiagnosaDetail" ADD CONSTRAINT "DiagnosaDetail_diagnosaId_fkey" FOREIGN KEY ("diagnosaId") REFERENCES "public"."Hasil"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."DiagnosaDetail" ADD CONSTRAINT "DiagnosaDetail_hasilId_fkey" FOREIGN KEY ("hasilId") REFERENCES "public"."Hasil"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
