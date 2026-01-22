@@ -7,9 +7,9 @@ function capitalizeWords(text: string) {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const {id} = await params;
+  const { id } = await params;
   const res = await fetch(new URL(`/api/diagnosadetail?id=${id}`, req.url), {
     cache: "no-store",
   });
@@ -26,7 +26,7 @@ export async function GET(
     where: { kd_penyakit: kdPenyakit },
   });
   const semuaSolusi: string[] = Array.from(
-    new Set(data.flatMap((d) => d.solusi.map((s: any) => String(s.solusi))))
+    new Set(data.flatMap((d) => d.solusi.map((s: any) => String(s.solusi)))),
   );
   function formatTanggal(tanggal: string) {
     if (!tanggal) return "-";
@@ -64,7 +64,7 @@ export async function GET(
       <tr><td class="font-semibold">NIK</td><td>: ${pasien.nik}</td></tr>
 
             <tr><td class="font-semibold">Tanggal Lahir</td><td>: ${formatTanggal(
-              pasien.tanggal_lahir
+              pasien.tanggal_lahir,
             )}</td></tr>
       <tr><td class="font-semibold">Umur</td><td>: ${pasien.umur}</td></tr>
       <tr><td class="font-semibold">Jenis Kelamin</td><td>: ${
@@ -114,10 +114,10 @@ export async function GET(
             <td class="border p-2 text-center">${g.gejala.kd_gejala}</td>
             <td class="border p-2">${g.gejala.nama_gejala}</td>
             <td class="border p-2 text-center">${capitalizeWords(
-              g.gejala.poin_gejala
+              g.gejala.poin_gejala,
             )}</td>
           </tr>
-        `
+        `,
           )
           .join("")}
       </tbody>
@@ -131,7 +131,15 @@ export async function GET(
 </html>
 `;
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
+  });
   const page = await browser.newPage();
 
   await page.setContent(html, { waitUntil: "networkidle0" });
