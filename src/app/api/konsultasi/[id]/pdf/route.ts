@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 import prisma from "../../../../../../lib/prisma";
 function capitalizeWords(text: string) {
   return text.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
@@ -10,7 +11,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const res = await fetch(new URL(`/api/diagnosadetail?id=${id}`, req.url), {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+  const res = await fetch(`${baseUrl}/api/diagnosadetail?id=${id}`, {
     cache: "no-store",
   });
 
