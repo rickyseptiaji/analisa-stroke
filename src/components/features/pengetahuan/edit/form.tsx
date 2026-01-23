@@ -25,12 +25,14 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { pengetahuanSchema } from "../../../../../lib/formSchema";
+import { useRouter } from "next/navigation";
 
 export default function PengetahuanEditForm({
   pengetahuanId,
 }: {
   pengetahuanId: string;
 }) {
+  const router = useRouter();
   const [isLoading, setIsloading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [penyakitOptions, setPenyakitOptions] = useState<
@@ -105,6 +107,7 @@ export default function PengetahuanEditForm({
       }
       form.reset();
       toast.success(data.message);
+            router.push("/pengetahuan");
     } catch (error) {
       console.log("error", error);
     } finally {

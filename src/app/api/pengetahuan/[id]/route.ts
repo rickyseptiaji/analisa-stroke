@@ -1,18 +1,22 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../lib/prisma";
 
-export async function GET(req: Request, context: any) {
-  const id = Number(context.params.id);
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const idNumber = Number(id);
 
   try {
     const pengetahuan = await prisma.pengetahuan.findUnique({
-      where: { id },
+      where: { id: idNumber },
     });
 
     if (!pengetahuan) {
       return NextResponse.json(
         { message: "Pengetahuan tidak ditemukan" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -20,13 +24,17 @@ export async function GET(req: Request, context: any) {
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function PATCH(req: Request, context: any) {
-  const id = Number(context.params.id);
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const idNumber = Number(id);
   const body = await req.json();
   const kd_pengetahuan = body.kd_pengetahuan.toUpperCase();
   const kd_penyakit = body.kd_penyakit.trim();
@@ -34,7 +42,7 @@ export async function PATCH(req: Request, context: any) {
 
   try {
     await prisma.pengetahuan.update({
-      where: { id },
+      where: { id: idNumber },
       data: {
         kd_pengetahuan,
         kd_penyakit,
@@ -48,45 +56,49 @@ export async function PATCH(req: Request, context: any) {
       },
       {
         status: 201,
-      }
+      },
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
-export async function DELETE(req: Request, context: any) {
-  const id = Number(context.params.id);
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
+  const idNumber = Number(id);
 
   try {
     const pengetahuan = await prisma.pengetahuan.findUnique({
-      where: { id },
+      where: { id: idNumber },
     });
 
     if (!pengetahuan) {
       return NextResponse.json(
         { message: "Pengetahuan tidak ditemukan" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     await prisma.pengetahuan.delete({
-      where: { id },
+      where: { id: idNumber },
     });
 
     return NextResponse.json(
       { message: "Data berhasil dihapus" },
       {
         status: 200,
-      }
+      },
     );
   } catch (error) {
     return NextResponse.json(
       { message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
