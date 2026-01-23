@@ -25,6 +25,15 @@ export const penyakitColumns: ColumnDef<any>[] = [
   {
     accessorKey: "nama_penyakit",
     header: "Nama Penyakit",
+      cell: ({ getValue }) => {
+    const value = getValue<string>();
+    if (!value) return "-";
+
+    const kapital =
+      value.charAt(0).toUpperCase() + value.slice(1);
+
+    return `Stroke ${kapital}`;
+  },
   },
 
 

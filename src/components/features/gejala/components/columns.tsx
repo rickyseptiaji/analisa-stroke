@@ -29,6 +29,12 @@ export const gejalaColumns: ColumnDef<any>[] = [
   {
     accessorKey: "poin_gejala",
     header: "Poin Gejala",
+    cell: ({ getValue }) => {
+      const value = getValue<string>();
+      if (!value) return "-";
+      const kapital = value.charAt(0).toUpperCase() + value.slice(1);
+      return kapital;
+    },
   },
 
   {

@@ -64,6 +64,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { DraggableRow } from "@/components/data-table";
 
 interface TableProps {
+  id: string
   kd_pengetahuan: string;
   kd_penyakit: string;
   kd_gejala: String;
@@ -110,7 +111,7 @@ export function PengetahuanTable({ data, isLoading }: TableState) {
         row.original.kd_gejala.toLowerCase().includes(value)
       );
     },
-    getRowId: (row) => row.kd_penyakit.toString(),
+    getRowId: (row) => row.id.toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -125,7 +126,7 @@ export function PengetahuanTable({ data, isLoading }: TableState) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  const dataIds = data.map((row) => row.kd_pengetahuan.toString());
+  const dataIds = data.map((row) => row.id.toString());
 
   const sensors = useSensors(useSensor(PointerSensor));
 
