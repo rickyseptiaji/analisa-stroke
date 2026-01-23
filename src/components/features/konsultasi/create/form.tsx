@@ -142,7 +142,7 @@ export default function KonsultasiCreateForm() {
           <div className="space-y-2">
             <div className="border rounded-lg overflow-hidden">
               <table className="w-full border-collapse text-sm">
-                <thead className="bg-gray-100">
+                <thead className="bg-muted">
                   <tr>
                     <th className="border p-2 text-left w-[80%]">Pertanyaan</th>
                     <th className="border p-2 text-center w-[20%]">Ceklis</th>
@@ -157,7 +157,7 @@ export default function KonsultasiCreateForm() {
                       render={({ field }) => {
                         const checked = field.value?.includes(item.kd_gejala);
                         return (
-                          <tr key={item.kd_gejala} className="hover:bg-gray-50">
+                          <tr key={item.kd_gejala} className="hover:bg-accent">
                             <td className="border p-2">{item.nama_gejala}</td>
                             <td className="border text-center">
                               <FormControl>
