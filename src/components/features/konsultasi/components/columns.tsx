@@ -24,6 +24,11 @@ export const konsultasiColumns: ColumnDef<any>[] = [
     header: "Nama Lengkap",
     accessorFn: (row) => row.pasien?.nama_lengkap ?? "-",
   },
+    {
+    id: "umur",
+    header: "Umur",
+    accessorFn: (row) => row.pasien?.umur ?? "-",
+  },
   {
     id: "tanggal_lahir",
     header: "Tanggal Lahir",
