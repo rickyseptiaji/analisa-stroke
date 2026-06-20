@@ -34,16 +34,18 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { pasienSchema } from "../../../../../lib/formSchema";
+import { calculateAge } from "@/lib/hitungUmur";
 
 export default function PasienCreateForm() {
   const router = useRouter();
+
   const [isLoading, setIsloading] = useState(false);
   const form = useForm<z.infer<typeof pasienSchema>>({
     resolver: zodResolver(pasienSchema),
     defaultValues: {
       nik: "",
       nama_lengkap: "",
-      umur: undefined,
+      umur: 0,
       alamat: "",
       jenis_kelamin: "",
       phone: "",
@@ -127,6 +129,7 @@ export default function PasienCreateForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tanggal Lahir</FormLabel>
+
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -134,20 +137,34 @@ export default function PasienCreateForm() {
                       className="w-full justify-between"
                     >
                       {field.value
-                        ? field.value.toLocaleDateString()
+                        ? field.value.toLocaleDateString("id-ID")
                         : "Pilih Tanggal"}
+
                       <ChevronDownIcon className="ml-2 h-4 w-4 opacity-50" />
                     </Button>
                   </PopoverTrigger>
+
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(date) => {
+                        field.onChange(date);
+
+                        if (date) {
+                          form.setValue("umur", calculateAge(date), {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          });
+                        } else {
+                          form.setValue("umur", 0);
+                        }
+                      }}
                       captionLayout="dropdown"
                     />
                   </PopoverContent>
                 </Popover>
+
                 <FormMessage />
               </FormItem>
             )}
@@ -158,9 +175,16 @@ export default function PasienCreateForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Umur</FormLabel>
+
                 <FormControl>
-                  <Input placeholder="Umur" {...field} type="number" />
+                  <Input
+                    type="number"
+                    value={field.value ?? 0}
+                    readOnly
+                    placeholder="Umur otomatis"
+                  />
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}

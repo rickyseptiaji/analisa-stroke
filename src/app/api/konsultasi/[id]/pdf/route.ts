@@ -89,6 +89,12 @@ const penyakit = await prisma.penyakit.findUnique({
     });
   }
 
+  function genderText(jenisKelamin: string) {
+    if (jenisKelamin === "L") return "Laki-laki";
+    if (jenisKelamin === "P") return "Perempuan";
+    return "-";
+  }
+
   const html = `
 <!DOCTYPE html>
 <html>
@@ -117,9 +123,9 @@ const penyakit = await prisma.penyakit.findUnique({
             <tr><td class="font-semibold">Tanggal Lahir</td><td>: ${formatTanggal(
               pasien.tanggal_lahir,
             )}</td></tr>
-      <tr><td class="font-semibold">Umur</td><td>: ${pasien.umur}</td></tr>
+      <tr><td class="font-semibold">Umur</td><td>: ${pasien.umur} Tahun</td></tr>
       <tr><td class="font-semibold">Jenis Kelamin</td><td>: ${
-        pasien.jenis_kelamin
+        genderText(pasien.jenis_kelamin)
       }</td></tr>
             <tr><td class="font-semibold">Alamat</td><td>: ${
               pasien.alamat
@@ -138,7 +144,7 @@ const penyakit = await prisma.penyakit.findUnique({
     <h2 class="text-xl font-semibold mb-3">Hasil Diagnosa</h2>
     <p class="text-sm">
       <span class="font-semibold">Diagnosa Penyakit:</span>
-      ${capitalizeWords(penyakit?.nama_penyakit ?? "-")}
+     Gejala ${capitalizeWords(penyakit?.nama_penyakit ?? "-")}
     </p>
 
     <p class="font-semibold mt-2">Solusi:</p>
